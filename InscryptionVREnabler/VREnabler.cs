@@ -41,7 +41,7 @@ namespace InscryptionVREnabler
             Logger.LogInfo("Patching successful!");
 
 
-            VREnabler.Logger.LogInfo("Checking for VR plugins...");
+            Logger.LogInfo("Checking for VR plugins...");
             
             string[] plugins = new string[]
             {
@@ -50,9 +50,9 @@ namespace InscryptionVREnabler
             };
 
             if (CopyFiles(PluginsPath, plugins, "Plugins."))
-                VREnabler.Logger.LogInfo("Successfully copied VR plugins!");
+                Logger.LogInfo("Successfully copied VR plugins!");
             else
-                VREnabler.Logger.LogInfo("VR plugins already present");
+                Logger.LogInfo("VR plugins already present");
         }
 
         private static bool EnableVROptions(string path)
@@ -118,7 +118,7 @@ namespace InscryptionVREnabler
                 }
                 num++;
             }
-            VREnabler.Logger.LogError("VR enable location not found!");
+            Logger.LogError("VR enable location not found!");
             return false;
         }
 
@@ -140,7 +140,7 @@ namespace InscryptionVREnabler
                     {
                         using (FileStream fileStream = new FileStream(Path.Combine(directoryInfo.FullName, fileName), FileMode.Create, FileAccess.ReadWrite, FileShare.Delete))
                         {
-                            VREnabler.Logger.LogInfo("Copying " + fileName);
+                            Logger.LogInfo("Copying " + fileName);
                             manifestResourceStream.CopyTo(fileStream);
                         }
                     }
@@ -162,7 +162,7 @@ namespace InscryptionVREnabler
                     if (resourceFileContent != installedFileContent)
                     {
                         flag = true;
-                        VREnabler.Logger.LogInfo("Overwriting " + fileName);
+                        Logger.LogInfo("Overwriting " + fileName);
                         File.WriteAllText(installedFile.FullName, resourceFileContent);
                     }
                 }
