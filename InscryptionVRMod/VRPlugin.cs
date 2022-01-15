@@ -1,4 +1,6 @@
-﻿using BepInEx;
+﻿using System.Collections;
+using BepInEx;
+using UnityEngine;
 
 namespace InscryptionVR
 {
@@ -16,8 +18,33 @@ namespace InscryptionVR
     {
         private void Awake()
         {
-            // Plugin startup logic
-            Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
+            Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_NAME} is loaded!");
+
+            //  Init data
+
+            //  Subscribe to onLoad (if necessary)
+        }
+
+
+        private IEnumerator InitSteamVR()
+        {
+            yield return new WaitForSeconds(1f);
+            //steamInitRunning = true;
+            //SteamVR.Initialize(false);
+
+            //while (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess)
+            //{
+            //    if (SteamVR.initializedState == SteamVR.InitializedStates.InitializeFailure)
+            //    {
+            //        MelonLogger.Error("[SteamVR] Initialization failure! Disabling VR modules.");
+            //        vrEnabled = false;
+            //        yield break;
+            //    }
+            //    yield return null;
+            //}
+
+            //steamInitRunning = false;
+
         }
     }
 }
