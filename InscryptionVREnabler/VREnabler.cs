@@ -20,7 +20,7 @@ namespace InscryptionVREnabler
     {
         internal static string VRPatcherPath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string ManagedPath => Paths.ManagedPath;
-        internal static string PluginsPath => Path.Combine(VREnabler.ManagedPath, "../Plugins");
+        internal static string PluginsPath => Path.Combine(ManagedPath, "../Plugins");
 
         private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("VREnabler");
 
@@ -33,7 +33,7 @@ namespace InscryptionVREnabler
         public static void Initialize()
         {
             Logger.LogInfo("Patching GGM...");
-            if (!VREnabler.EnableVROptions(Path.Combine(VREnabler.ManagedPath, "../globalgamemanagers")))
+            if (!EnableVROptions(Path.Combine(ManagedPath, "../globalgamemanagers")))
             {
                 Logger.LogWarning("Couldn't patch GGM!");
                 return;
@@ -59,7 +59,7 @@ namespace InscryptionVREnabler
         {
             AssetsManager assetsManager = new AssetsManager();
             AssetsFileInstance assetsFileInstance = assetsManager.LoadAssetsFile(path, false, "");
-            assetsManager.LoadClassDatabase(Path.Combine(VREnabler.VRPatcherPath, "cldb.dat"));
+            assetsManager.LoadClassDatabase(Path.Combine(VRPatcherPath, "cldb.dat"));
             int num = 0;
             while ((long)num < (long)((ulong)assetsFileInstance.table.assetFileInfoCount))
             {

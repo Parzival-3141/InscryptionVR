@@ -1,0 +1,17 @@
+--------  THINGS TO REWORK  --------
+
+---  VideoCameraRig  ---
+Uses a seperate camera and a canvas. Ends up working like a render texture camera
+Could scale it up, put it in worldspace, idk
+
+
+------  CABIN  ------
+
+---  TextDisplayer ---
+Uses a seperate camera, but it's perspective and worldspace.
+Just move it back if it should be on HUD.
+Rescale and move to correct pos if it should be floating above the table
+
+---  ScreenEffects --- 
+Same as TextDisplayer, just move it back a little to prevent z-fighting
+

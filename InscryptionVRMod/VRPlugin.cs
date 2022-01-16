@@ -1,6 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using BepInEx;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+using DiskCardGame;
 
 namespace InscryptionVR
 {
@@ -16,19 +21,66 @@ namespace InscryptionVR
     [BepInProcess("Inscryption.exe")]
     public class VRPlugin : BaseUnityPlugin
     {
+        public static Scene CurrentScene;
+
+        private bool vrEnabled;
+
         private void Awake()
         {
-            Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_NAME} is loaded!");
+            Logger.LogInfo($"{PluginInfo.PLUGIN_NAME} loaded");
+
+            if (new List<string>(Environment.GetCommandLineArgs()).Contains("OpenVR"))
+                vrEnabled = true;
+            else
+            {
+                Logger.LogWarning("Launch parameter \"-vrmode\" not set to OpenVR, not loading VR patches!");
+
+                vrEnabled = false;
+                return;
+            }
 
             //  Init data
 
-            //  Subscribe to onLoad (if necessary)
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+       
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
+        {
+            if (!vrEnabled) return;
+
+            CurrentScene = scene;
+
+            switch (CurrentScene.name)
+            {
+                case "Start":
+                    Transform cam = Camera.main.transform;
+                    cam.position += new Vector3(0, 0, 6);
+                    break;
+
+                case "Part1_Cabin":
+                case "Part1_Vision":
+                case "Part1_Sanctum":
+                case "Part1_Finale":
+                case "Part3_Cabin":
+                    UIManager.Instance.transform.
+                        Find("ScreenEffects").localPosition += new Vector3(0, 0, 0.05f);
+                    break;
+
+                default:
+                    break;
+            }
+
+            StartCoroutine(InitSteamVR());
         }
 
 
         private IEnumerator InitSteamVR()
         {
-            yield return new WaitForSeconds(1f);
+            yield return null;
+
+            //yield return new WaitForSeconds(1f);
             //steamInitRunning = true;
             //SteamVR.Initialize(false);
 
