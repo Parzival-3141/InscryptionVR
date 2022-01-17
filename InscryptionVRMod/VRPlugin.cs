@@ -6,10 +6,11 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using DiskCardGame;
+using BepInEx.Logging;
 
 namespace InscryptionVR
 {
-    public static class PluginInfo
+    internal static class PluginInfo
     {
         public const string PLUGIN_GUID = "parzival.inscryption.vrmod";
         public const string PLUGIN_NAME = "InscryptionVRMod";
@@ -21,16 +22,23 @@ namespace InscryptionVR
     [BepInProcess("Inscryption.exe")]
     public class VRPlugin : BaseUnityPlugin
     {
-        public static Scene CurrentScene;
+        public static Scene CurrentScene { get; private set; }
+        public static new ManualLogSource Logger { get; private set; }
+
 
         private bool vrEnabled;
 
         private void Awake()
         {
+            Logger = base.Logger;
+
             Logger.LogInfo($"{PluginInfo.PLUGIN_NAME} loaded");
 
             if (new List<string>(Environment.GetCommandLineArgs()).Contains("OpenVR"))
+            {
+                Logger.LogInfo("VR patches enabled");
                 vrEnabled = true;
+            }
             else
             {
                 Logger.LogWarning("Launch parameter \"-vrmode\" not set to OpenVR, not loading VR patches!");
@@ -40,6 +48,9 @@ namespace InscryptionVR
             }
 
             //  Init data
+
+            Modules.HarmonyPatches.Init();
+
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
@@ -57,6 +68,9 @@ namespace InscryptionVR
                 case "Start":
                     Transform cam = Camera.main.transform;
                     cam.position += new Vector3(0, 0, 6);
+
+                    StartCoroutine(SkipStartMenu());
+
                     break;
 
                 case "Part1_Cabin":
@@ -64,8 +78,10 @@ namespace InscryptionVR
                 case "Part1_Sanctum":
                 case "Part1_Finale":
                 case "Part3_Cabin":
-                    UIManager.Instance.transform.
-                        Find("ScreenEffects").localPosition += new Vector3(0, 0, 0.05f);
+                    UIManager.Instance.transform.Find("ScreenEffects").localPosition += new Vector3(0, 0, 0.02f);
+                    UIManager.Instance.transform.Find("TextDisplayer").localPosition = new Vector3(0, -0.2f, 1.05f);
+
+
                     break;
 
                 default:
@@ -75,6 +91,16 @@ namespace InscryptionVR
             StartCoroutine(InitSteamVR());
         }
 
+
+        private IEnumerator SkipStartMenu()
+        {
+            yield return new WaitForSeconds(6f);
+
+            var continueCard = GameObject.Find("MenuCard_Continue")?.GetComponent<MenuCard>();
+
+            if (continueCard != null)
+                GameObject.Find("StartMenu").GetComponent<MenuController>().PlayMenuCardImmediate(continueCard);
+        }
 
         private IEnumerator InitSteamVR()
         {

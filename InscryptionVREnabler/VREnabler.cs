@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace InscryptionVREnabler
+namespace InscryptionVR
 {
     //Class by MrPurple, adapted by DrBibop, modified by Parzival
 
@@ -38,7 +38,7 @@ namespace InscryptionVREnabler
                 Logger.LogWarning("Couldn't patch GGM!");
                 return;
             }
-            Logger.LogInfo("Patching successful!");
+            Logger.LogInfo("GGM patching successful!");
 
 
             Logger.LogInfo("Checking for VR plugins...");
