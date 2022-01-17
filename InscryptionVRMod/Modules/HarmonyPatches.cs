@@ -1,6 +1,7 @@
 ﻿using MonoMod.Cil;
 using HarmonyLib;
-
+using DiskCardGame;
+using System.Reflection;
 
 namespace InscryptionVR.Modules
 {
@@ -31,6 +32,28 @@ namespace InscryptionVR.Modules
 
             c.GotoNext(x => x.MatchLdcI4(550));
             c.Next.Operand = 1100;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(OpponentAnimationController), "SetExplorationModeLookTarget")]
+        private static bool ExplorationLookTargetPatch(OpponentAnimationController __instance)
+        {
+            __instance.SetLookTarget(ViewManager.Instance.CameraParent.Find("Pixel Camera"), UnityEngine.Vector3.zero);
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(OpponentAnimationController), "ClearLookTarget")]
+        private static bool ClearLookTargetPatch(OpponentAnimationController __instance)
+        {
+            var type = typeof(OpponentAnimationController);
+            var bFlags = BindingFlags.NonPublic | BindingFlags.Instance;
+
+            type.GetField("lookTarget", bFlags).SetValue(__instance, ViewManager.Instance.CameraParent.Find("Pixel Camera"));
+            type.GetField("lookOffset", bFlags).SetValue(__instance, UnityEngine.Vector3.zero);
+
+
+            return false;
         }
     }
 }

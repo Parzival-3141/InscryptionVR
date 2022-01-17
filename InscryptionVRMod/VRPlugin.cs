@@ -78,6 +78,10 @@ namespace InscryptionVR
                 case "Part1_Sanctum":
                 case "Part1_Finale":
                 case "Part3_Cabin":
+
+                    //  @Refactor:
+                    //  Neither of these work yet, might have to wait a frame
+                    //  Find() might only return if the GO is active
                     UIManager.Instance.transform.Find("ScreenEffects").localPosition += new Vector3(0, 0, 0.02f);
                     UIManager.Instance.transform.Find("TextDisplayer").localPosition = new Vector3(0, -0.2f, 1.05f);
 

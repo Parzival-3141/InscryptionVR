@@ -13,5 +13,8 @@ Just move it back if it should be on HUD.
 Rescale and move to correct pos if it should be floating above the table
 
 ---  ScreenEffects --- 
-Same as TextDisplayer, just move it back a little to prevent z-fighting
+Same as TextDisplayer, just move it back a little to prevent z-fighting (doesn't seem to work?)
 
+---  LeshyAnimController ---
+Set look target to player head
+Patch methods that make him look at the player
