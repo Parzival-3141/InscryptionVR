@@ -18,3 +18,9 @@ Same as TextDisplayer, just move it back a little to prevent z-fighting (doesn't
 ---  LeshyAnimController ---
 Set look target to player head
 Patch methods that make him look at the player
+
+
+
+Screen position out of view frustum errors
+
+cancel fov changes on vr camera (or silence the warnings at least)
