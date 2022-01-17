@@ -4,23 +4,27 @@
 Uses a seperate camera and a canvas. Ends up working like a render texture camera
 Could scale it up, put it in worldspace, idk
 
+Screen position out of view frustum errors
+Cancel fov changes on vr camera (or silence the warnings at least)
+
+---  PauseMenu  ---
+Move pause camera closer
+
+
+---  Mouse Input  ---
+Could try to use a controller as a pointer for the Cursor
+Would have to patch/rework the Cursor
+
+Seems to work best when the main cam is pointing perpendicular to the UI "screen"
+Makes sense since thats how it'd work on flatscreen
+
+
+---  Tracked Input  ---
+Create a little steamvr tracking rig in Unity and port it in
+Patch/rework Cursor and Interactable stuff to accept input from the VrRig
+
+
 
 ------  CABIN  ------
 
----  TextDisplayer ---
-Uses a seperate camera, but it's perspective and worldspace.
-Just move it back if it should be on HUD.
-Rescale and move to correct pos if it should be floating above the table
 
----  ScreenEffects --- 
-Same as TextDisplayer, just move it back a little to prevent z-fighting (doesn't seem to work?)
-
----  LeshyAnimController ---
-Set look target to player head
-Patch methods that make him look at the player
-
-
-
-Screen position out of view frustum errors
-
-cancel fov changes on vr camera (or silence the warnings at least)

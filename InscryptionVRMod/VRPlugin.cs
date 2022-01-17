@@ -22,8 +22,8 @@ namespace InscryptionVR
     [BepInProcess("Inscryption.exe")]
     public class VRPlugin : BaseUnityPlugin
     {
-        public static Scene CurrentScene { get; private set; }
-        public static new ManualLogSource Logger { get; private set; }
+        internal static Scene CurrentScene { get; private set; }
+        internal static new ManualLogSource Logger { get; private set; }
 
 
         private bool vrEnabled;
@@ -48,9 +48,7 @@ namespace InscryptionVR
             }
 
             //  Init data
-
             Modules.HarmonyPatches.Init();
-
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
@@ -78,17 +76,11 @@ namespace InscryptionVR
                 case "Part1_Sanctum":
                 case "Part1_Finale":
                 case "Part3_Cabin":
-
-                    //  @Refactor:
-                    //  Neither of these work yet, might have to wait a frame
-                    //  Find() might only return if the GO is active
-                    UIManager.Instance.transform.Find("ScreenEffects").localPosition += new Vector3(0, 0, 0.02f);
-                    UIManager.Instance.transform.Find("TextDisplayer").localPosition = new Vector3(0, -0.2f, 1.05f);
-
-
+                    StartCoroutine(UIFixes());
                     break;
 
                 default:
+                    Logger.LogInfo($"Scene \"{scene}\" has no loading event!");
                     break;
             }
 
@@ -100,10 +92,37 @@ namespace InscryptionVR
         {
             yield return new WaitForSeconds(6f);
 
+            if (!Input.GetKey(KeyCode.LeftAlt))
+                yield break;
+
             var continueCard = GameObject.Find("MenuCard_Continue")?.GetComponent<MenuCard>();
 
             if (continueCard != null)
-                GameObject.Find("StartMenu").GetComponent<MenuController>().PlayMenuCardImmediate(continueCard);
+                GameObject.Find("StartMenu")?.GetComponent<MenuController>().PlayMenuCardImmediate(continueCard);
+        }
+
+        private IEnumerator UIFixes()
+        {
+            yield return null;
+
+            //  Move ScreenEffects to prevent z-fighting
+            UIManager.Instance.transform.Find("PerspectiveUICamera/ScreenEffects").localPosition += new Vector3(0f, 0f, 0.02f);
+            
+            //  Move TextDisplayer to a better location
+            UIManager.Instance.transform.Find("PerspectiveUICamera/TextDisplayer").localPosition = new Vector3(0f, -0.2f, 1.05f);
+
+            //  Move PauseMenu cam closer
+            var camParent = new GameObject("CameraParent").transform;
+            camParent.parent = UIManager.Instance.transform.Find("PauseMenu/MenuParent");
+            
+            var pixelCam = UIManager.Instance.transform.Find("PauseMenu/MenuParent/PixelCamera");
+            pixelCam.parent = camParent;
+            
+            camParent.localPosition = new Vector3(0f, -1f, 6f);
+
+            //  Disable Pause Camera gbcMode
+            var bFlags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+            typeof(PixelCamera).GetField("gbcMode", bFlags).SetValue(pixelCam.GetComponent<PixelCamera>(), false);
         }
 
         private IEnumerator InitSteamVR()

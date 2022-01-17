@@ -14,10 +14,7 @@ namespace InscryptionVR.Modules
             HarmonyIntance = new Harmony(PluginInfo.PLUGIN_GUID);
 
             VRPlugin.Logger?.LogInfo("Harmony Patching...");
-
             HarmonyIntance.PatchAll(typeof(HarmonyPatches));
-            
-            VRPlugin.Logger?.LogInfo("Harmony Patching Complete");
         }
 
 

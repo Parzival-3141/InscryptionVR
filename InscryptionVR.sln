@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.32106.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InscryptionVRMod", "InscryptionVRMod\InscryptionVRMod.csproj", "{2BEA01D2-DBBE-4B46-96B2-E140A6E595BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InscryptionVREnabler", "InscryptionVREnabler\InscryptionVREnabler.csproj", "{96022175-3AA6-457E-9E4C-3552FC7C6003}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InscryptionVREnabler", "InscryptionVREnabler\InscryptionVREnabler.csproj", "{96022175-3AA6-457E-9E4C-3552FC7C6003}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
