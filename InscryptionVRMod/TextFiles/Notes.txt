@@ -39,3 +39,16 @@ so I could probably modify the camera stuff based off the prefab, as opposed to 
 Idk if I could modify the prefab itself and load that instead?
 
 Check to see if thats true for the cabin scenes
+
+---  VR Interactions  ---
+Move player figurine by picking it up manually
+Grabbing and holding pickups in your hands
+
+Holding your deck
+	- deck in left hand, draw cards/interact with right
+	- grab card out of deck with right hand to play it
+	- deck leaves hand, can use left hand to select sacrifices
+	  (can grab deck w left hand to back out)
+	- play card with right hand
+	
+	
