@@ -32,6 +32,15 @@ namespace InscryptionVR.Modules
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(PixelCamera), "LateUpdate")]
+        private static void PixelCameraGBCTogglePatch(PixelCamera __instance)
+        {
+            if (Configs.EnableGBCToggle.Value) return;
+
+            typeof(PixelCamera).GetField("gbcMode", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(__instance, false);
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(OpponentAnimationController), "SetExplorationModeLookTarget")]
         private static bool ExplorationLookTargetPatch(OpponentAnimationController __instance)
         {
@@ -48,7 +57,6 @@ namespace InscryptionVR.Modules
 
             type.GetField("lookTarget", bFlags).SetValue(__instance, ViewManager.Instance.CameraParent.Find("Pixel Camera"));
             type.GetField("lookOffset", bFlags).SetValue(__instance, UnityEngine.Vector3.zero);
-
 
             return false;
         }

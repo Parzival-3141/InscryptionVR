@@ -31,8 +31,11 @@ namespace InscryptionVR
         private void Awake()
         {
             Logger = base.Logger;
-
             Logger.LogInfo($"{PluginInfo.PLUGIN_NAME} loaded");
+
+            
+            Modules.Configs.Init(Config);
+
 
             if (new List<string>(Environment.GetCommandLineArgs()).Contains("OpenVR"))
             {
@@ -46,6 +49,7 @@ namespace InscryptionVR
                 vrEnabled = false;
                 return;
             }
+
 
             //  Init data
             Modules.HarmonyPatches.Init();
@@ -64,11 +68,8 @@ namespace InscryptionVR
             switch (CurrentScene.name)
             {
                 case "Start":
-                    Transform cam = Camera.main.transform;
-                    cam.position += new Vector3(0, 0, 6);
-
+                    StartCoroutine(StartMenuFixes());
                     StartCoroutine(SkipStartMenu());
-
                     break;
 
                 case "Part1_Cabin":
@@ -84,9 +85,16 @@ namespace InscryptionVR
                     break;
             }
 
-            StartCoroutine(InitSteamVR());
+            //StartCoroutine(InitSteamVR());
         }
 
+        private IEnumerator StartMenuFixes()
+        {
+            yield return null;
+
+            ReparentInPlace("PixelCameraParent", GBC.CameraController.Instance.transform.Find("PixelCamera"))
+                .localPosition = new Vector3(0f, -1f, 6f);
+        }
 
         private IEnumerator SkipStartMenu()
         {
@@ -112,17 +120,17 @@ namespace InscryptionVR
             UIManager.Instance.transform.Find("PerspectiveUICamera/TextDisplayer").localPosition = new Vector3(0f, -0.2f, 1.05f);
 
             //  Move PauseMenu cam closer
-            var camParent = new GameObject("CameraParent").transform;
-            camParent.parent = UIManager.Instance.transform.Find("PauseMenu/MenuParent");
-            
             var pixelCam = UIManager.Instance.transform.Find("PauseMenu/MenuParent/PixelCamera");
-            pixelCam.parent = camParent;
+            var camParent = ReparentInPlace("CameraParent", pixelCam);
             
             camParent.localPosition = new Vector3(0f, -1f, 6f);
 
             //  Disable Pause Camera gbcMode
-            var bFlags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
-            typeof(PixelCamera).GetField("gbcMode", bFlags).SetValue(pixelCam.GetComponent<PixelCamera>(), false);
+            if (!Modules.Configs.EnableGBCToggle.Value)
+            {
+                var bFlags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+                typeof(PixelCamera).GetField("gbcMode", bFlags).SetValue(pixelCam.GetComponent<PixelCamera>(), false);
+            }
         }
 
         private IEnumerator InitSteamVR()
@@ -146,6 +154,19 @@ namespace InscryptionVR
 
             //steamInitRunning = false;
 
+        }
+
+
+        private Transform ReparentInPlace(string newParentName, Transform toReparent)
+        {
+            var newParent = new GameObject(newParentName).transform;
+
+            if (toReparent.parent != null)
+                newParent.SetParent(toReparent.parent, false);
+            
+            toReparent.SetParent(newParent, true);
+
+            return newParent;
         }
     }
 }

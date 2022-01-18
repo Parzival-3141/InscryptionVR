@@ -28,3 +28,14 @@ Patch/rework Cursor and Interactable stuff to accept input from the VrRig
 ------  CABIN  ------
 
 
+
+
+--------  MISC STUFF  --------
+
+---  Cameras & UI
+Most of the camera stuff (at least for GBC ones) are just a prefab,
+so I could probably modify the camera stuff based off the prefab, as opposed to per scene.
+
+Idk if I could modify the prefab itself and load that instead?
+
+Check to see if thats true for the cabin scenes
