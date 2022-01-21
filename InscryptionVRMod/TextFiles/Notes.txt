@@ -40,6 +40,8 @@ Idk if I could modify the prefab itself and load that instead?
 
 Check to see if thats true for the cabin scenes
 
+Can do height calibration and use that to find the tracking-root position for the current view
+
 ---  VR Interactions  ---
 Move player figurine by picking it up manually
 Grabbing and holding pickups in your hands
@@ -52,3 +54,9 @@ Holding your deck
 	- play card with right hand
 	
 	
+---  View Stuff  ---
+ViewController is in charge of what Views can be accessed from the current one and how.
+ViewManager is in charge of moving the PixelCameraParent, changing the view (+ moving the camera and handModel accordingly), 
+	displaying button hints for a view, and contains all the view transforms (relative to fpsController position).
+
+FirstPersonController is in charge of changing navigation zones

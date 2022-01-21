@@ -7,18 +7,21 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using DiskCardGame;
 using BepInEx.Logging;
+using InscryptionVR.Modules;
+using Valve.VR;
 
 namespace InscryptionVR
 {
     internal static class PluginInfo
     {
-        public const string PLUGIN_GUID = "parzival.inscryption.vrmod";
-        public const string PLUGIN_NAME = "InscryptionVRMod";
-        public const string PLUGIN_VERSION = "0.0.1";
+        public const string GUID = "parzival.inscryption.vrmod";
+        public const string NAME = "InscryptionVRMod";
+        public const string VERSION = "0.0.1";
+        public const string DESCRIPTION = "A VR mod for Inscryption";
     }
 
 
-    [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
+    [BepInPlugin(PluginInfo.GUID, PluginInfo.NAME, PluginInfo.VERSION)]
     [BepInProcess("Inscryption.exe")]
     public class VRPlugin : BaseUnityPlugin
     {
@@ -27,11 +30,12 @@ namespace InscryptionVR
 
 
         private bool vrEnabled;
+        private bool steamInitRunning;
 
         private void Awake()
         {
             Logger = base.Logger;
-            Logger.LogInfo($"{PluginInfo.PLUGIN_NAME} loaded");
+            Logger.LogInfo($"{PluginInfo.NAME} loaded");
 
             
             Modules.Configs.Init(Config);
@@ -65,6 +69,9 @@ namespace InscryptionVR
 
             CurrentScene = scene;
 
+            StartCoroutine(InitSteamVR());
+
+
             switch (CurrentScene.name)
             {
                 case "Start":
@@ -78,6 +85,7 @@ namespace InscryptionVR
                 case "Part1_Finale":
                 case "Part3_Cabin":
                     StartCoroutine(UIFixes());
+                    VRController.Init();
                     break;
 
                 default:
@@ -85,7 +93,26 @@ namespace InscryptionVR
                     break;
             }
 
-            //StartCoroutine(InitSteamVR());
+        }
+
+        private IEnumerator InitSteamVR()
+        {
+            yield return new WaitForSeconds(1f);
+            steamInitRunning = true;
+            SteamVR.Initialize(false);
+
+            while (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess)
+            {
+                if (SteamVR.initializedState == SteamVR.InitializedStates.InitializeFailure)
+                {
+                    Logger.LogError("[SteamVR] Initialization failure! Disabling VR modules.");
+                    vrEnabled = false;
+                    yield break;
+                }
+                yield return null;
+            }
+
+            steamInitRunning = false;
         }
 
         private IEnumerator StartMenuFixes()
@@ -124,38 +151,7 @@ namespace InscryptionVR
             var camParent = ReparentInPlace("CameraParent", pixelCam);
             
             camParent.localPosition = new Vector3(0f, -1f, 6f);
-
-            //  Disable Pause Camera gbcMode
-            if (!Modules.Configs.EnableGBCToggle.Value)
-            {
-                var bFlags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
-                typeof(PixelCamera).GetField("gbcMode", bFlags).SetValue(pixelCam.GetComponent<PixelCamera>(), false);
-            }
         }
-
-        private IEnumerator InitSteamVR()
-        {
-            yield return null;
-
-            //yield return new WaitForSeconds(1f);
-            //steamInitRunning = true;
-            //SteamVR.Initialize(false);
-
-            //while (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess)
-            //{
-            //    if (SteamVR.initializedState == SteamVR.InitializedStates.InitializeFailure)
-            //    {
-            //        MelonLogger.Error("[SteamVR] Initialization failure! Disabling VR modules.");
-            //        vrEnabled = false;
-            //        yield break;
-            //    }
-            //    yield return null;
-            //}
-
-            //steamInitRunning = false;
-
-        }
-
 
         private Transform ReparentInPlace(string newParentName, Transform toReparent)
         {

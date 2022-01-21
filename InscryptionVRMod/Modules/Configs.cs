@@ -13,7 +13,7 @@ namespace InscryptionVR.Modules
         {
             File = configFile;
 
-            EnableGBCToggle = File.Bind("General", "EnableGBCToggle", false, "Allows PixelCameras to toggle GBC mode");
+            EnableGBCToggle = File.Bind("General", "EnableGBCToggle", false, "Allows PixelCameras to toggle GBC mode.\n(Does reduce visibility)");
         }
     }
 }

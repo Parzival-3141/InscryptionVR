@@ -3,6 +3,8 @@ using HarmonyLib;
 using DiskCardGame;
 using System.Reflection;
 
+#pragma warning disable Publicizer001
+
 namespace InscryptionVR.Modules
 {
     internal static class HarmonyPatches
@@ -11,10 +13,11 @@ namespace InscryptionVR.Modules
 
         public static void Init()
         {
-            HarmonyIntance = new Harmony(PluginInfo.PLUGIN_GUID);
+            HarmonyIntance = new Harmony(PluginInfo.GUID);
 
             VRPlugin.Logger?.LogInfo("Harmony Patching...");
             HarmonyIntance.PatchAll(typeof(HarmonyPatches));
+            VRPlugin.Logger?.LogInfo("Patching Complete");
         }
 
 
@@ -37,7 +40,9 @@ namespace InscryptionVR.Modules
         {
             if (Configs.EnableGBCToggle.Value) return;
 
-            typeof(PixelCamera).GetField("gbcMode", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(__instance, false);
+            __instance.gbcMode = false;
+
+            //typeof(PixelCamera).GetField("gbcMode", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(__instance, false);
         }
 
         [HarmonyPrefix]
@@ -52,11 +57,14 @@ namespace InscryptionVR.Modules
         [HarmonyPatch(typeof(OpponentAnimationController), "ClearLookTarget")]
         private static bool ClearLookTargetPatch(OpponentAnimationController __instance)
         {
-            var type = typeof(OpponentAnimationController);
-            var bFlags = BindingFlags.NonPublic | BindingFlags.Instance;
+            //var type = typeof(OpponentAnimationController);
+            //var bFlags = BindingFlags.NonPublic | BindingFlags.Instance;
 
-            type.GetField("lookTarget", bFlags).SetValue(__instance, ViewManager.Instance.CameraParent.Find("Pixel Camera"));
-            type.GetField("lookOffset", bFlags).SetValue(__instance, UnityEngine.Vector3.zero);
+            __instance.lookTarget = ViewManager.Instance.pixelCamera.transform;
+            __instance.lookOffset = UnityEngine.Vector3.zero;
+
+            //type.GetField("lookTarget", bFlags).SetValue(__instance, ViewManager.Instance.CameraParent.Find("Pixel Camera"));
+            //type.GetField("lookOffset", bFlags).SetValue(__instance, UnityEngine.Vector3.zero);
 
             return false;
         }
