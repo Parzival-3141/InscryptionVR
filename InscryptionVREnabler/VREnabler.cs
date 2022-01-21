@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace InscryptionVR
+namespace InscryptionVREnabler
 {
     //Class by MrPurple, adapted by DrBibop, modified by Parzival
 
@@ -21,6 +21,7 @@ namespace InscryptionVR
         internal static string VRPatcherPath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string ManagedPath => Paths.ManagedPath;
         internal static string PluginsPath => Path.Combine(ManagedPath, "../Plugins");
+        internal static string SteamVRPath => Path.Combine(ManagedPath, "../StreamingAssets/SteamVR");
 
         private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("VREnabler");
 
@@ -32,6 +33,8 @@ namespace InscryptionVR
         [Obsolete("Should not be used!", true)]
         public static void Initialize()
         {
+            #region Patch GGM
+
             Logger.LogInfo("Patching GGM...");
             if (!EnableVROptions(Path.Combine(ManagedPath, "../globalgamemanagers")))
             {
@@ -40,6 +43,9 @@ namespace InscryptionVR
             }
             Logger.LogInfo("GGM patching successful!");
 
+            #endregion
+
+            #region Copy Plugins
 
             Logger.LogInfo("Checking for VR plugins...");
             
@@ -53,6 +59,51 @@ namespace InscryptionVR
                 Logger.LogInfo("Successfully copied VR plugins!");
             else
                 Logger.LogInfo("VR plugins already present");
+
+            #endregion
+
+            #region Copy Binds
+
+            Logger.LogInfo("Checking for binding files...");
+
+            if (!Directory.Exists(SteamVRPath))
+            {
+                try
+                {
+                    Directory.CreateDirectory(SteamVRPath);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError("Could not create SteamVR folder in StreamingAssets: " + e.Message);
+                    Logger.LogError(e.StackTrace);
+                    return;
+                }
+            }
+
+            string[] bindingFiles = new string[]
+            {
+                "actions.json",
+                //"binding_holographic_hmd.json",
+                //"binding_index_hmd.json",
+                //"binding_rift.json",
+                //"binding_vive.json",
+                //"binding_vive_cosmos.json",
+                //"binding_vive_pro.json",
+                //"binding_vive_tracker_camera.json",
+                //"bindings_holographic_controller.json",
+                "bindings_knuckles.json",
+                //"bindings_logitech_stylus.json",
+                //"bindings_oculus_touch.json",
+                //"bindings_vive_controller.json",
+                //"bindings_vive_cosmos_controller.json"
+            };
+
+            if (CopyFiles(SteamVRPath, bindingFiles, "Binds.", true))
+                Logger.LogInfo("Successfully copied binding files!");
+            else
+                Logger.LogInfo("Binding files already present");
+
+            #endregion
         }
 
         private static bool EnableVROptions(string path)
@@ -67,8 +118,8 @@ namespace InscryptionVR
                 {
                     AssetFileInfoEx assetInfo = assetsFileInstance.table.GetAssetInfo((long)num);
                     AssetTypeInstance ati = assetsManager.GetTypeInstance(assetsFileInstance, assetInfo, false);
-                    AssetTypeValueField assetTypeValueField = (ati != null) ? ati.GetBaseField(0) : null;
-                    AssetTypeValueField assetTypeValueField2 = (assetTypeValueField != null) ? assetTypeValueField.Get("enabledVRDevices") : null;
+                    AssetTypeValueField assetTypeValueField = ati?.GetBaseField(0);
+                    AssetTypeValueField assetTypeValueField2 = assetTypeValueField?.Get("enabledVRDevices");
                     if (assetTypeValueField2 != null)
                     {
                         AssetTypeValueField assetTypeValueField3 = assetTypeValueField2.Get("Array");
@@ -141,6 +192,7 @@ namespace InscryptionVR
                         using (FileStream fileStream = new FileStream(Path.Combine(directoryInfo.FullName, fileName), FileMode.Create, FileAccess.ReadWrite, FileShare.Delete))
                         {
                             Logger.LogInfo("Copying " + fileName);
+                            Logger.LogInfo("position = " + manifestResourceStream.Position);
                             manifestResourceStream.CopyTo(fileStream);
                         }
                     }

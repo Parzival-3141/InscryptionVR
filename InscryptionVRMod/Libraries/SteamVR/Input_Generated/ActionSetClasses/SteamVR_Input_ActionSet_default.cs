@@ -105,6 +105,22 @@ namespace Valve.VR
             }
         }
         
+        public virtual SteamVR_Action_Boolean DPadUp
+        {
+            get
+            {
+                return SteamVR_Actions.default_DPadUp;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean DPadDown
+        {
+            get
+            {
+                return SteamVR_Actions.default_DPadDown;
+            }
+        }
+        
         public virtual SteamVR_Action_Boolean Grip
         {
             get

@@ -7,15 +7,19 @@
     <Authors>MrPurple, DrBibop, Parzival</Authors>
     <ApplicationIcon />
     <Win32Resource />
-    <RootNamespace>InscryptionVR</RootNamespace>
+    <RootNamespace>InscryptionVREnabler</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Binds\actions.json" />
+    <None Remove="Binds\bindings_knuckles.json" />
     <None Remove="Plugins\openvr_api.dll" />
     <None Remove="Plugins\OVRPlugin.dll" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Binds\actions.json" />
+    <EmbeddedResource Include="Binds\bindings_knuckles.json" />
     <EmbeddedResource Include="Plugins\openvr_api.dll" />
     <EmbeddedResource Include="Plugins\OVRPlugin.dll" />
   </ItemGroup>

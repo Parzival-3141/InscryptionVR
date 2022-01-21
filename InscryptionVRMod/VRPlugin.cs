@@ -16,7 +16,7 @@ namespace InscryptionVR
     {
         public const string GUID = "parzival.inscryption.vrmod";
         public const string NAME = "InscryptionVRMod";
-        public const string VERSION = "0.0.1";
+        public const string VERSION = "0.0.3";  
         public const string DESCRIPTION = "A VR mod for Inscryption";
     }
 
@@ -38,7 +38,7 @@ namespace InscryptionVR
             Logger.LogInfo($"{PluginInfo.NAME} loaded");
 
             
-            Modules.Configs.Init(Config);
+            Configs.Init(Config);
 
 
             if (new List<string>(Environment.GetCommandLineArgs()).Contains("OpenVR"))
@@ -56,7 +56,7 @@ namespace InscryptionVR
 
 
             //  Init data
-            Modules.HarmonyPatches.Init();
+            HarmonyPatches.Init();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }

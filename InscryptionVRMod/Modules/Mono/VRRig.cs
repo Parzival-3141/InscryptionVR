@@ -8,7 +8,7 @@ namespace InscryptionVR.Modules.Mono
 {
     public class VRRig : MonoBehaviour
     {
-        public Transform calibratedHeight;
+        public Transform calibratedCenter;
         public Transform pixelCamParent;
         
         public bool doCorrection = true;
@@ -16,8 +16,7 @@ namespace InscryptionVR.Modules.Mono
 
         private void Start()
         {
-            var cam = FirstPersonController.Instance.transform.Find("PixelCameraParent/PixelCamera");
-            Debug.Log(cam);
+            Transform cam = GameObject.Find("FirstPersonController/PixelCameraParent/PixelCamera")?.transform;
             pixelCamParent = cam.parent;
             cam.SetParent(transform, true);
         }
@@ -26,14 +25,14 @@ namespace InscryptionVR.Modules.Mono
         {
             if (!doCorrection) return;
 
-            var posDelta = pixelCamParent.position - calibratedHeight.position;
+            var posDelta = pixelCamParent.position - calibratedCenter.position;
             transform.position += posDelta;
 
             if (doRotation)
             {
-                var rotDelta = pixelCamParent.rotation * Quaternion.Inverse(calibratedHeight.rotation);
+                var rotDelta = pixelCamParent.rotation * Quaternion.Inverse(calibratedCenter.rotation);
                 rotDelta.ToAngleAxis(out var angle, out var axis);
-                transform.RotateAround(calibratedHeight.position, axis, angle);
+                transform.RotateAround(calibratedCenter.position, axis, angle);
             }
         }
     }

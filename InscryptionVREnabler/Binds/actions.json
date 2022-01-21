@@ -1,0 +1,83 @@
+{
+  "actions": [
+    {
+      "name": "/actions/default/in/Pose",
+      "type": "pose"
+    },
+    {
+      "name": "/actions/default/in/SkeletonHandLeft",
+      "type": "skeleton",
+      "skeleton": "/skeleton/hand/left"
+    },
+    {
+      "name": "/actions/default/in/SkeletonHandRight",
+      "type": "skeleton",
+      "skeleton": "/skeleton/hand/right"
+    },
+    {
+      "name": "/actions/default/in/TriggerPull",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/default/in/TriggerClick",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/AClick",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/BClick",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/ThumbstickPos",
+      "type": "vector2"
+    },
+    {
+      "name": "/actions/default/in/ThumbstickClick",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/DPadRight",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/DPadLeft",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/DPadUp",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/DPadDown",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/Grip",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/GripPull",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/default/out/Haptics",
+      "type": "vibration"
+    }
+  ],
+  "action_sets": [
+    {
+      "name": "/actions/default",
+      "usage": "single"
+    }
+  ],
+  "default_bindings": [
+    {
+      "controller_type": "knuckles",
+      "binding_url": "bindings_knuckles.json"
+    }
+  ],
+  "localization": []
+}

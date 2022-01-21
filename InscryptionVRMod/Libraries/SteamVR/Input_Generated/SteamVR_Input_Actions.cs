@@ -39,6 +39,10 @@ namespace Valve.VR
         
         private static SteamVR_Action_Boolean p_default_DPadLeft;
         
+        private static SteamVR_Action_Boolean p_default_DPadUp;
+        
+        private static SteamVR_Action_Boolean p_default_DPadDown;
+        
         private static SteamVR_Action_Boolean p_default_Grip;
         
         private static SteamVR_Action_Single p_default_GripPull;
@@ -133,6 +137,22 @@ namespace Valve.VR
             }
         }
         
+        public static SteamVR_Action_Boolean default_DPadUp
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_DPadUp.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean default_DPadDown
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_DPadDown.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
         public static SteamVR_Action_Boolean default_Grip
         {
             get
@@ -171,6 +191,8 @@ namespace Valve.VR
                     SteamVR_Actions.default_ThumbstickClick,
                     SteamVR_Actions.default_DPadRight,
                     SteamVR_Actions.default_DPadLeft,
+                    SteamVR_Actions.default_DPadUp,
+                    SteamVR_Actions.default_DPadDown,
                     SteamVR_Actions.default_Grip,
                     SteamVR_Actions.default_GripPull,
                     SteamVR_Actions.default_Haptics};
@@ -186,6 +208,8 @@ namespace Valve.VR
                     SteamVR_Actions.default_ThumbstickClick,
                     SteamVR_Actions.default_DPadRight,
                     SteamVR_Actions.default_DPadLeft,
+                    SteamVR_Actions.default_DPadUp,
+                    SteamVR_Actions.default_DPadDown,
                     SteamVR_Actions.default_Grip,
                     SteamVR_Actions.default_GripPull};
             Valve.VR.SteamVR_Input.actionsOut = new Valve.VR.ISteamVR_Action_Out[] {
@@ -201,6 +225,8 @@ namespace Valve.VR
                     SteamVR_Actions.default_ThumbstickClick,
                     SteamVR_Actions.default_DPadRight,
                     SteamVR_Actions.default_DPadLeft,
+                    SteamVR_Actions.default_DPadUp,
+                    SteamVR_Actions.default_DPadDown,
                     SteamVR_Actions.default_Grip};
             Valve.VR.SteamVR_Input.actionsSingle = new Valve.VR.SteamVR_Action_Single[] {
                     SteamVR_Actions.default_TriggerPull,
@@ -220,6 +246,8 @@ namespace Valve.VR
                     SteamVR_Actions.default_ThumbstickClick,
                     SteamVR_Actions.default_DPadRight,
                     SteamVR_Actions.default_DPadLeft,
+                    SteamVR_Actions.default_DPadUp,
+                    SteamVR_Actions.default_DPadDown,
                     SteamVR_Actions.default_Grip,
                     SteamVR_Actions.default_GripPull};
         }
@@ -237,6 +265,8 @@ namespace Valve.VR
             SteamVR_Actions.p_default_ThumbstickClick = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/ThumbstickClick")));
             SteamVR_Actions.p_default_DPadRight = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/DPadRight")));
             SteamVR_Actions.p_default_DPadLeft = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/DPadLeft")));
+            SteamVR_Actions.p_default_DPadUp = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/DPadUp")));
+            SteamVR_Actions.p_default_DPadDown = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/DPadDown")));
             SteamVR_Actions.p_default_Grip = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Grip")));
             SteamVR_Actions.p_default_GripPull = ((SteamVR_Action_Single)(SteamVR_Action.Create<SteamVR_Action_Single>("/actions/default/in/GripPull")));
             SteamVR_Actions.p_default_Haptics = ((SteamVR_Action_Vibration)(SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/default/out/Haptics")));

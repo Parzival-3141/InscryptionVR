@@ -52,7 +52,10 @@ Holding your deck
 	- deck leaves hand, can use left hand to select sacrifices
 	  (can grab deck w left hand to back out)
 	- play card with right hand
-	
+
+
+Have to create actions and binds (with the correct appkey/url)
+Patch game inputs or subscribe steamvr inputs to game ones
 	
 ---  View Stuff  ---
 ViewController is in charge of what Views can be accessed from the current one and how.
