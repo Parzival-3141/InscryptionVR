@@ -192,7 +192,6 @@ namespace InscryptionVREnabler
                         using (FileStream fileStream = new FileStream(Path.Combine(directoryInfo.FullName, fileName), FileMode.Create, FileAccess.ReadWrite, FileShare.Delete))
                         {
                             Logger.LogInfo("Copying " + fileName);
-                            Logger.LogInfo("position = " + manifestResourceStream.Position);
                             manifestResourceStream.CopyTo(fileStream);
                         }
                     }

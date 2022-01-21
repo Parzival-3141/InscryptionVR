@@ -30,7 +30,7 @@ namespace InscryptionVR
 
 
         private bool vrEnabled;
-        private bool steamInitRunning;
+        //private bool steamInitRunning;
 
         private void Awake()
         {
@@ -68,6 +68,7 @@ namespace InscryptionVR
             if (!vrEnabled) return;
 
             CurrentScene = scene;
+            Logger.LogInfo($"Scene {scene.name} loaded");
 
             StartCoroutine(InitSteamVR());
 
@@ -89,7 +90,7 @@ namespace InscryptionVR
                     break;
 
                 default:
-                    Logger.LogInfo($"Scene \"{scene}\" has no loading event!");
+                    Logger.LogInfo($"Scene \"{scene.name}\" has no loading event!");
                     break;
             }
 
@@ -98,7 +99,7 @@ namespace InscryptionVR
         private IEnumerator InitSteamVR()
         {
             yield return new WaitForSeconds(1f);
-            steamInitRunning = true;
+            //steamInitRunning = true;
             SteamVR.Initialize(false);
 
             while (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess)
@@ -112,7 +113,7 @@ namespace InscryptionVR
                 yield return null;
             }
 
-            steamInitRunning = false;
+            //steamInitRunning = false;
         }
 
         private IEnumerator StartMenuFixes()

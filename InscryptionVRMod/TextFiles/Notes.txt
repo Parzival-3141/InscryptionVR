@@ -56,6 +56,9 @@ Holding your deck
 
 Have to create actions and binds (with the correct appkey/url)
 Patch game inputs or subscribe steamvr inputs to game ones
+
+Do HL:A style boundaries when you stick your head into a wall.
+Blur screen out and point player back, if they're outside the playable area ramp up glitch effects too.
 	
 ---  View Stuff  ---
 ViewController is in charge of what Views can be accessed from the current one and how.
