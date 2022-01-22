@@ -14,6 +14,8 @@ namespace InscryptionVR.Modules.Mono
         public bool doCorrection = true;
         public bool doRotation = true;
 
+        public HandController handLeft, handRight;
+
         private void Start()
         {
             Transform cam = GameObject.Find("/FirstPersonController/PixelCameraParent/PixelCamera")?.transform;

@@ -8,7 +8,7 @@ namespace InscryptionVR.Modules
 {
     internal static class VRController
     {
-        public static Mono.VRRig rig;
+        public static Mono.VRRig Rig { get; private set; }
 
         public static void Init()
         {
@@ -18,33 +18,30 @@ namespace InscryptionVR.Modules
         private static void CreateRig()
         {
             VRPlugin.Logger.LogInfo("Creating VRRig...");
-            rig = new GameObject("VRRig").AddComponent<Mono.VRRig>();
+            Rig = new GameObject("VRRig").AddComponent<Mono.VRRig>();
 
-            rig.calibratedCenter = new GameObject("CalibratedCenter").transform;
-            rig.calibratedCenter.SetParent(rig.transform);
-            rig.calibratedCenter.localPosition = new Vector3(0f, 1.1f);
+            Rig.calibratedCenter = new GameObject("CalibratedCenter").transform;
+            Rig.calibratedCenter.SetParent(Rig.transform);
+            Rig.calibratedCenter.localPosition = new Vector3(0f, 1.1f);
 
-
-            //  Right Hand
-            var handR = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            handR.transform.SetParent(rig.transform);
-            handR.transform.localScale = Vector3.one * 0.1f;
-
-            var poseR = handR.AddComponent<SteamVR_Behaviour_Pose>();
-            poseR.poseAction = SteamVR_Actions.default_Pose;
-            poseR.inputSource = SteamVR_Input_Sources.RightHand;
-            poseR.origin = rig.transform;
-
-            //  Left Hand
-            var handL = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            handL.transform.SetParent(rig.transform);
-            handL.transform.localScale = Vector3.one * 0.1f;
-
-            var poseL = handL.AddComponent<SteamVR_Behaviour_Pose>();
-            poseL.poseAction = SteamVR_Actions.default_Pose;
-            poseL.inputSource = SteamVR_Input_Sources.LeftHand;
-            poseL.origin = rig.transform;
+            Rig.handRight = CreateHand(Hand.Right);
+            Rig.handLeft = CreateHand(Hand.Left);
         }
 
+        public static Mono.HandController CreateHand(Hand hand)
+        {
+            var handObj = new GameObject("Hand" + hand.ToString()).AddComponent<Mono.HandController>();
+
+            handObj.source = hand == Hand.Right ? SteamVR_Input_Sources.RightHand : SteamVR_Input_Sources.LeftHand;
+            handObj.transform.SetParent(Rig.transform);
+
+            return handObj;
+        }
+    }
+
+    public enum Hand
+    {
+        Left,
+        Right,
     }
 }

@@ -66,3 +66,21 @@ ViewManager is in charge of moving the PixelCameraParent, changing the view (+ m
 	displaying button hints for a view, and contains all the view transforms (relative to fpsController position).
 
 FirstPersonController is in charge of changing navigation zones
+
+---  InteractionCursor  ---
+Controls the position of the cursor, what interactable it's hovering over, and what cursor sprites to show.
+
+RaycastForInteractable:
+gets the screenPos of the cursor's worldPos using OrthoUICam,
+and fires a ray out of the main cam using that screenPos
+
+
+update = 
+update cursor position using orthoUICam
+set cursor down sprite if Selecting
+show altInput if still hovering over altInteractable
+show altInput hint (rClick sprite) if player hasnt used alt input yet
+set altInput down sprite if AltSelecting
+update currentInteractable: RaycastForInteractable, current.exit if new != current, new.enter if new is not null
+update Main Input: if current != null current.stay and set mainCursorType to current.cursorType,
+	if Selecting run current.SelectStart and set cursorDownInteractable, if deSelecting run current.SelectEnd
