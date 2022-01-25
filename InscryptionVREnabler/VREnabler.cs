@@ -7,7 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+using SR = System.Reflection;
+using Mono.Cecil.Cil;
+using MonoMod.Utils;
 
 namespace InscryptionVREnabler
 {
@@ -18,7 +20,7 @@ namespace InscryptionVREnabler
     /// </summary>
     public static class VREnabler
     {
-        internal static string VRPatcherPath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        internal static string VRPatcherPath => Path.GetDirectoryName(SR.Assembly.GetExecutingAssembly().Location);
         internal static string ManagedPath => Paths.ManagedPath;
         internal static string PluginsPath => Path.Combine(ManagedPath, "../Plugins");
         internal static string SteamVRPath => Path.Combine(ManagedPath, "../StreamingAssets/SteamVR");
@@ -33,6 +35,7 @@ namespace InscryptionVREnabler
         [Obsolete("Should not be used!", true)]
         public static void Initialize()
         {
+
             #region Patch GGM
 
             Logger.LogInfo("Patching GGM...");
@@ -48,7 +51,7 @@ namespace InscryptionVREnabler
             #region Copy Plugins
 
             Logger.LogInfo("Checking for VR plugins...");
-            
+
             string[] plugins = new string[]
             {
                 "openvr_api.dll",
@@ -104,6 +107,7 @@ namespace InscryptionVREnabler
                 Logger.LogInfo("Binding files already present");
 
             #endregion
+
         }
 
         private static bool EnableVROptions(string path)
@@ -164,9 +168,7 @@ namespace InscryptionVREnabler
                         }
                     }
                 }
-                catch
-                {
-                }
+                catch { }
                 num++;
             }
             Logger.LogError("VR enable location not found!");
@@ -178,7 +180,7 @@ namespace InscryptionVREnabler
             DirectoryInfo directoryInfo = new DirectoryInfo(destinationPath);
             FileInfo[] files = directoryInfo.GetFiles();
             bool flag = false;
-            Assembly executingAssembly = Assembly.GetExecutingAssembly();
+            var executingAssembly = SR.Assembly.GetExecutingAssembly();
             string name = executingAssembly.GetName().Name;
             string[] array = fileNames;
             for (int i = 0; i < array.Length; i++)
@@ -227,18 +229,38 @@ namespace InscryptionVREnabler
         /// It must contain a list of managed assemblies to patch as a public static <see cref="IEnumerable{T}"/> property named TargetDLLs
         /// </summary>
         [Obsolete("Should not be used!", true)]
-        public static IEnumerable<string> TargetDLLs { get; } = new string[0];
+        public static IEnumerable<string> TargetDLLs { get; } = new[] { "Assembly-CSharp.dll" };
 
         /// <summary>
         /// For BepInEx to identify your patcher as a patcher, it must match the patcher contract as outlined in the BepInEx docs:
         /// https://bepinex.github.io/bepinex_docs/v5.0/articles/dev_guide/preloader_patchers.html#patcher-contract
         /// It must contain a public static void method named Patch which receives an <see cref="AssemblyDefinition"/> argument,
         /// which patches each of the target assemblies in the TargetDLLs list.
-        /// 
-        /// We don't actually need to patch any of the managed assemblies, so we are providing an empty method here.
         /// </summary>
-        /// <param name="ad"></param>
+        /// <param name="asm"></param>
         [Obsolete("Should not be used!", true)]
-        public static void Patch(AssemblyDefinition ad) { }
+        public static void Patch(AssemblyDefinition asm)
+        {
+            using (var pluginAsm = AssemblyDefinition.ReadAssembly(Directory.GetFiles(Paths.PluginPath, "InscryptionVRMod.dll", SearchOption.AllDirectories)[0]))
+            {
+                var rfiReplacement = pluginAsm.MainModule.GetType("InscryptionVR.Modules.HarmonyPatches")
+                    .Methods.First(x => x.Name == "RaycastForInteractableReplacement");
+
+                var rfi = asm.MainModule.GetType("DiskCardGame.InteractionCursor")
+                    .Methods.First(x => x.Name == "RaycastForInteractable");
+
+                var rfiGeneric = rfi.GenericParameters[0];
+                
+                rfi.Body = new MethodBody(rfi);
+                var il = rfi.Body.GetILProcessor();
+
+                il.Emit(OpCodes.Ldarg_1);
+                il.Emit(OpCodes.Ldtoken, rfiGeneric);
+                il.Emit(OpCodes.Call, il.Import(typeof(Type).GetMethod(nameof(Type.GetTypeFromHandle))));
+                il.Emit(OpCodes.Call, asm.MainModule.ImportReference(rfiReplacement));
+                il.Emit(OpCodes.Castclass, rfiGeneric);
+                il.Emit(OpCodes.Ret);
+            }
+        }
     }
 }

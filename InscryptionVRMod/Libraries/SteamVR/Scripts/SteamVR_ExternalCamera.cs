@@ -299,7 +299,7 @@ namespace Valve.VR
             Graphics.DrawTexture(new Rect(0, 0, w, h), cam.targetTexture, colorMat);
 
             // Re-render scene with post-processing fx disabled (if necessary) since they override alpha.
-            var pp = cam.gameObject.GetComponent("PostProcessingBehaviour") as MonoBehaviour;
+            var pp = cam.gameObject.GetComponent("UnityEngine.PostProcessing.PostProcessingBehaviour") as MonoBehaviour;
             if ((pp != null) && pp.enabled)
             {
                 pp.enabled = false;

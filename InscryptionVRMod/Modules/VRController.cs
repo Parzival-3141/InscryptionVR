@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using InscryptionVR.Modules.Mono;
 using UnityEngine;
 using Valve.VR;
 
@@ -8,7 +9,10 @@ namespace InscryptionVR.Modules
 {
     internal static class VRController
     {
-        public static Mono.VRRig Rig { get; private set; }
+        public static VRRig Rig { get; private set; }
+
+        public static HandController PrimaryHand => Configs.IsLeftHanded.Value ? Rig.handLeft : Rig.handRight;
+        public static HandController SecondaryHand => Configs.IsLeftHanded.Value ? Rig.handRight : Rig.handLeft;
 
         public static void Init()
         {
