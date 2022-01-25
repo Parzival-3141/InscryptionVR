@@ -3,13 +3,14 @@ using DiskCardGame;
 using UnityEngine;
 using HarmonyLib;
 using Valve.VR;
+using System.Reflection;
 
 namespace InscryptionVR.Modules
 {
     internal static partial class HarmonyPatches
     {
         //  Doesn't need Harmony attributes,
-        //  Gets patched in the VREnabler patcher
+        //  gets patched in the VREnabler patcher
         public static InteractableBase RaycastForInteractableReplacement(int layerMask, Type searchType)
         {
             var handTransform = VRController.PrimaryHand.transform;

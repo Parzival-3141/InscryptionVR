@@ -9,6 +9,10 @@ namespace InscryptionVR.Modules
 {
     internal static class VRController
     {
+        //  @Refactor:
+        //  Bug with steamvr nullref-ing after leaving the 
+        //  cabin, can't find a BehaviourPose object?
+
         public static bool VRRigExists => Rig != null && Rig.isActiveAndEnabled;
         public static VRRig Rig { get; private set; }
         public static HandController PrimaryHand => Configs.IsLeftHanded.Value ? Rig.handLeft : Rig.handRight;
@@ -33,8 +37,6 @@ namespace InscryptionVR.Modules
             Rig.handLeft = CreateHand(Hand.Left);
         }
 
-        
-        //  @Refactor: build VRRig in Unity and port over with an AssetBundle
         private static Mono.HandController CreateHand(Hand hand)
         {
             var handObj = new GameObject("Hand" + hand.ToString()).AddComponent<Mono.HandController>();

@@ -16,7 +16,7 @@ namespace InscryptionVR
     {
         public const string GUID = "parzival.inscryption.vrmod";
         public const string NAME = "InscryptionVRMod";
-        public const string VERSION = "0.0.4";  
+        public const string VERSION = "0.0.4"; 
         public const string DESCRIPTION = "A VR mod for Inscryption";
     }
 
