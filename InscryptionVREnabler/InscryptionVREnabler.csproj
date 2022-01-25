@@ -38,4 +38,8 @@
       <HintPath>libs\AssetsTools.NET.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="COPY &quot;$(TargetPath)&quot; &quot;C:\Users\pocke\AppData\Roaming\r2modmanPlus-local\Inscryption\profiles\Default\BepInEx\patchers\&quot; /Y&#xD;&#xA;COPY &quot;$(ProjectDir)libs\AssetsTools.NET.dll&quot; &quot;C:\Users\pocke\AppData\Roaming\r2modmanPlus-local\Inscryption\profiles\Default\BepInEx\patchers\&quot; /Y" />
+  </Target>
 </Project>

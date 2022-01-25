@@ -1,7 +1,6 @@
 ﻿using MonoMod.Cil;
 using HarmonyLib;
 using DiskCardGame;
-using System.Reflection;
 
 #pragma warning disable Publicizer001
 
@@ -29,8 +28,6 @@ namespace InscryptionVR.Modules
             if (Configs.EnableGBCToggle.Value) return;
 
             __instance.gbcMode = false;
-
-            //typeof(PixelCamera).GetField("gbcMode", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(__instance, false);
         }
     }
 }

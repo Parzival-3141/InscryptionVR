@@ -18,10 +18,8 @@ namespace InscryptionVR.Modules.Mono
 
         private void Start()
         {
-            Transform cam = GameObject.Find("/FirstPersonController/PixelCameraParent/PixelCamera")?.transform;
-            VRPlugin.Logger.LogInfo("Cam Test " + cam);
-            pixelCamParent = cam.parent;
-            cam.SetParent(transform, true);
+            pixelCamParent = ViewManager.Instance.CameraParent;
+            ViewManager.Instance.pixelCamera.transform.SetParent(transform, true);
         }
 
         private void LateUpdate()

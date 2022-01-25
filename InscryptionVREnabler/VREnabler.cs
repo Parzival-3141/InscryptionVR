@@ -13,7 +13,7 @@ using MonoMod.Utils;
 
 namespace InscryptionVREnabler
 {
-    //Class by MrPurple, adapted by DrBibop, modified by Parzival
+    //Class by MrPurple, adapted by DrBibop, modified by Parzival and Windows10CE
 
     /// <summary>
     /// A patcher which runs ahead of UnityPlayer to enable VR in the Global Game Manager.
@@ -241,6 +241,8 @@ namespace InscryptionVREnabler
         [Obsolete("Should not be used!", true)]
         public static void Patch(AssemblyDefinition asm)
         {
+            //  @Refactor: Causes memory leak on startup
+            //  RaycastInteractable generic patch
             using (var pluginAsm = AssemblyDefinition.ReadAssembly(Directory.GetFiles(Paths.PluginPath, "InscryptionVRMod.dll", SearchOption.AllDirectories)[0]))
             {
                 var rfiReplacement = pluginAsm.MainModule.GetType("InscryptionVR.Modules.HarmonyPatches")
