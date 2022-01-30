@@ -6,11 +6,11 @@
       "poses": [
         {
           "output": "/actions/default/in/pose",
-          "path": "/user/hand/left/pose/handgrip"
+          "path": "/user/hand/left/pose/gdc2015"
         },
         {
           "output": "/actions/default/in/pose",
-          "path": "/user/hand/right/pose/handgrip"
+          "path": "/user/hand/right/pose/gdc2015"
         }
       ],
       "haptics": [
@@ -169,6 +169,12 @@
             "west": {
               "output": "/actions/default/in/dpadleft"
             }
+			"north": {
+				"output": "/actions/default/in/dpadup"
+			}
+			"south": {
+				"output": "/actions/default/in/dpaddown"
+			}
           }
         },
         {

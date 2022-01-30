@@ -6,8 +6,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using DiskCardGame;
-using BepInEx.Logging;
 using InscryptionVR.Modules;
+using BepInEx.Logging;
 using Valve.VR;
 
 namespace InscryptionVR
@@ -57,6 +57,7 @@ namespace InscryptionVR
 
             //  Init data
             HarmonyPatches.Init();
+            Modules.Resources.Init();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }

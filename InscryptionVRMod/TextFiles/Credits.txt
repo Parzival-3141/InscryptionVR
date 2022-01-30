@@ -1,3 +1,4 @@
 Trev - Lots of code help, couldn't have done it without them
 MrPurple, DrBibop - VREnabler
 Aaron (Windows10CE) - Inscryption modding & Bepinex help
+gkjohnson - Dithering shadercode (https://github.com/gkjohnson/unity-dithered-transparency-shader)
