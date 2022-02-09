@@ -8,6 +8,7 @@ namespace InscryptionVR.Modules.Mono
 {
     public class VRRig : MonoBehaviour
     {
+        public Transform trackingParent;
         public Transform calibratedCenter;
         public Transform pixelCamParent;
         
@@ -19,7 +20,8 @@ namespace InscryptionVR.Modules.Mono
         private void Start()
         {
             pixelCamParent = ViewManager.Instance.CameraParent;
-            ViewManager.Instance.pixelCamera.transform.SetParent(transform, true);
+            ViewManager.Instance.pixelCamera.transform.SetParent(trackingParent, true);
+            ViewManager.Instance.pixelCamera.nearClipPlane = 0.01f;
         }
 
         private void LateUpdate()

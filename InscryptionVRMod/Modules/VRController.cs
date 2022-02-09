@@ -32,6 +32,7 @@ namespace InscryptionVR.Modules
             pArea.drawInGame = shouldRenderRig;
 
             var rig = VRRigPrefab.AddComponent<VRRig>();
+            rig.trackingParent = VRRigPrefab.transform.Find("TrackingParent");
             rig.calibratedCenter = VRRigPrefab.transform.Find("Calibrated Center");
             rig.handLeft = left;
             rig.handRight = right;
@@ -41,25 +42,33 @@ namespace InscryptionVR.Modules
         public static HandController SetupHand(Hand hand, GameObject VRRigPrefab)
         {
             bool isRight = hand == Hand.Right;
-            string subfix1 = hand.ToString();
+            string subfix1 = $"({hand})";
             string subfix2 = isRight ? "_r" : "_l";
 
             //  HandController
             var handObj = VRRigPrefab.transform.Find("TrackingParent/Controller " + subfix1)
-                .gameObject.AddComponent<Mono.HandController>();
+                .gameObject.AddComponent<HandController>();
             handObj.handedness = hand;
+
 
             //  Behaviour Skeleton
             var skele = handObj.gameObject.AddComponent<SteamVR_Behaviour_Skeleton>();
             skele.skeletonAction = isRight ? SteamVR_Actions.default_SkeletonHandRight : SteamVR_Actions.default_SkeletonHandLeft;
             skele.inputSource = handObj.InputSource;
-            skele.skeletonRoot = handObj.skeletonWrist.parent;
+            skele.skeletonRoot = handObj.transform.Find("vr_glove_skeleton/Root");
             skele.mirroring = isRight ? SteamVR_Behaviour_Skeleton.MirrorType.None : SteamVR_Behaviour_Skeleton.MirrorType.RightToLeft;
             skele.fallbackCurlAction = SteamVR_Actions.default_GripPull;
 
+
+            //  Behaviour Pose
+            //var pose = handObj.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
+            //pose.poseAction = SteamVR_Actions._default.Pose;
+            //pose.inputSource = handObj.InputSource;
+
             //  Model Positioning
             handObj.handModel = handObj.transform.Find("Hand Model " + subfix1);
-            handObj.skeletonWrist = handObj.transform.Find("vr_glove_skeleton/Root/wrist_r");
+            handObj.handTarget = skele.skeletonRoot.Find("wrist_r");
+            //handObj.handTarget = null;
 
             handObj.handModel.transform.Find("mesh" + subfix2).
                 GetComponent<SkinnedMeshRenderer>().material.shader = Resources.HandDitherShader;

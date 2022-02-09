@@ -27,8 +27,6 @@ namespace InscryptionVR.Modules
             }
 
             VRRigPrefab = dataBundle.LoadAssetWithHF<GameObject>("Assets/AssetBundleData/VR/VRRig.prefab");
-            
-            
             HandDitherShader = dataBundle.LoadAssetWithHF<Shader>("Assets/AssetBundleData/VR/Art/Shaders/HandDither.shader");
 
             var right = VRController.SetupHand(Hand.Right, VRRigPrefab);
@@ -42,14 +40,13 @@ namespace InscryptionVR.Modules
         private static AssetBundle GetAssetBundle(string name)
         {
             MemoryStream memoryStream;
-            using(Stream stream = CurrentAsm.GetManifestResourceStream(CurrentAsm.GetName().Name + ".Resources." + name))
+            using (Stream stream = CurrentAsm.GetManifestResourceStream("InscryptionVR.Resources." + name))
             {
                 memoryStream = new MemoryStream((int)stream.Length);
-                var buffer = new byte[stream.Length];
+                byte[] buffer = new byte[stream.Length];
                 stream.Read(buffer, 0, buffer.Length);
                 memoryStream.Write(buffer, 0, buffer.Length);
             }
-
             return AssetBundle.LoadFromMemory(memoryStream.ToArray());
         }
 

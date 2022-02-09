@@ -37,14 +37,14 @@ namespace InscryptionVREnabler
         {
 
             #region Patch GGM
-
-            Logger.LogInfo("Patching GGM...");
-            if (!EnableVROptions(Path.Combine(ManagedPath, "../globalgamemanagers")))
-            {
-                Logger.LogWarning("Couldn't patch GGM!");
-                return;
-            }
-            Logger.LogInfo("GGM patching successful!");
+            //  @Refactor: Causes memory leak on startup
+            //Logger.LogInfo("Patching GGM...");
+            //if (!EnableVROptions(Path.Combine(ManagedPath, "../globalgamemanagers")))
+            //{
+            //    Logger.LogWarning("Couldn't patch GGM!");
+            //    return;
+            //}
+            //Logger.LogInfo("GGM patching successful!");
 
             #endregion
 
@@ -58,7 +58,13 @@ namespace InscryptionVREnabler
                 "OVRPlugin.dll",
             };
 
-            if (CopyFiles(PluginsPath, plugins, "Plugins."))
+            string[] managedLibraries = new string[]
+            {
+                "SteamVR.dll",
+                "SteamVR_Actions.dll"
+            };
+
+            if (CopyFiles(PluginsPath, plugins, "Plugins.") || CopyFiles(ManagedPath, managedLibraries, "Plugins."))
                 Logger.LogInfo("Successfully copied VR plugins!");
             else
                 Logger.LogInfo("VR plugins already present");
@@ -66,6 +72,7 @@ namespace InscryptionVREnabler
             #endregion
 
             #region Copy Binds
+            //  @Refactor: SteamVR doesn't recognize/load the binds correctly (even if it says it does)
 
             Logger.LogInfo("Checking for binding files...");
 
@@ -159,8 +166,8 @@ namespace InscryptionVREnabler
                             {
                                 using (AssetsFileWriter assetsFileWriter2 = new AssetsFileWriter(memoryStream2))
                                 {
-                                    assetsFileInstance.file.Write(assetsFileWriter2, 0L, list, 0U, null);
-                                    assetsFileInstance.stream.Close();
+                                    assetsFileInstance.file.Write(assetsFileWriter2, (long)0UL, list, 0U, null);
+                                    assetsFileInstance.AssetsStream.Close();
                                     File.WriteAllBytes(path, memoryStream2.ToArray());
                                 }
                             }
@@ -241,7 +248,7 @@ namespace InscryptionVREnabler
         [Obsolete("Should not be used!", true)]
         public static void Patch(AssemblyDefinition asm)
         {
-            //  @Refactor: Causes memory leak on startup
+
             //  RaycastInteractable generic patch
             using (var pluginAsm = AssemblyDefinition.ReadAssembly(Directory.GetFiles(Paths.PluginPath, "InscryptionVRMod.dll", SearchOption.AllDirectories)[0]))
             {
@@ -252,7 +259,7 @@ namespace InscryptionVREnabler
                     .Methods.First(x => x.Name == "RaycastForInteractable");
 
                 var rfiGeneric = rfi.GenericParameters[0];
-                
+
                 rfi.Body = new MethodBody(rfi);
                 var il = rfi.Body.GetILProcessor();
 
@@ -263,6 +270,7 @@ namespace InscryptionVREnabler
                 il.Emit(OpCodes.Castclass, rfiGeneric);
                 il.Emit(OpCodes.Ret);
             }
+
         }
     }
 }

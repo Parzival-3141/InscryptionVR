@@ -15,6 +15,8 @@
     <None Remove="Binds\bindings_knuckles.json" />
     <None Remove="Plugins\openvr_api.dll" />
     <None Remove="Plugins\OVRPlugin.dll" />
+    <None Remove="Plugins\SteamVR.dll" />
+    <None Remove="Plugins\SteamVR_Actions.dll" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +24,8 @@
     <EmbeddedResource Include="Binds\bindings_knuckles.json" />
     <EmbeddedResource Include="Plugins\openvr_api.dll" />
     <EmbeddedResource Include="Plugins\OVRPlugin.dll" />
+    <EmbeddedResource Include="Plugins\SteamVR.dll" />
+    <EmbeddedResource Include="Plugins\SteamVR_Actions.dll" />
   </ItemGroup>
 
   <ItemGroup>

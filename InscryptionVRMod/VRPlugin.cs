@@ -16,7 +16,7 @@ namespace InscryptionVR
     {
         public const string GUID = "parzival.inscryption.vrmod";
         public const string NAME = "InscryptionVRMod";
-        public const string VERSION = "0.0.4"; 
+        public const string VERSION = "0.0.6"; 
         public const string DESCRIPTION = "A VR mod for Inscryption";
     }
 
@@ -37,9 +37,6 @@ namespace InscryptionVR
             Logger = base.Logger;
             Logger.LogInfo($"{PluginInfo.NAME} loaded");
 
-            
-            Configs.Init(Config);
-
 
             if (new List<string>(Environment.GetCommandLineArgs()).Contains("OpenVR"))
             {
@@ -55,8 +52,22 @@ namespace InscryptionVR
             }
 
 
+            SteamVR.Initialize(false);
+            if (SteamVR.initializedState == SteamVR.InitializedStates.InitializeFailure)
+            {
+                Logger.LogError("[SteamVR] Initialization failure! Disabling VR modules.");
+                vrEnabled = false;
+                return;
+            }
+            
+
+            Logger.LogInfo("actions filepath: " + SteamVR.settings.actionsFilePath);
+            Logger.LogInfo("editor appkey: " + SteamVR.settings.editorAppKey);
+
             //  Init data
+            Configs.Init(Config);
             HarmonyPatches.Init();
+            //SteamVR_Actions.PreInitialize();
             Modules.Resources.Init();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -70,9 +81,6 @@ namespace InscryptionVR
 
             CurrentScene = scene;
             Logger.LogInfo($"Scene {scene.name} loaded");
-
-            StartCoroutine(InitSteamVR());
-
 
             switch (CurrentScene.name)
             {
@@ -95,26 +103,6 @@ namespace InscryptionVR
                     break;
             }
 
-        }
-
-        private IEnumerator InitSteamVR()
-        {
-            yield return new WaitForSeconds(1f);
-            //steamInitRunning = true;
-            SteamVR.Initialize(false);
-
-            while (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess)
-            {
-                if (SteamVR.initializedState == SteamVR.InitializedStates.InitializeFailure)
-                {
-                    Logger.LogError("[SteamVR] Initialization failure! Disabling VR modules.");
-                    vrEnabled = false;
-                    yield break;
-                }
-                yield return null;
-            }
-
-            //steamInitRunning = false;
         }
 
         private IEnumerator StartMenuFixes()

@@ -17,7 +17,7 @@ namespace InscryptionVR.Modules.Mono
         public Hand handedness;
 
         public Transform handModel; //  Assumes origin is in wrist!
-        public Transform skeletonWrist;
+        public Transform handTarget;
         public Vector3 positionOffset = new(0f, 0f, -0.02f);
         public Vector3 rotationOffset = new(0f, 0f, -14f);
 
@@ -31,10 +31,13 @@ namespace InscryptionVR.Modules.Mono
 
         private void LateUpdate()
         {
-            var pOffset = skeletonWrist.TransformVector(positionOffset);
+            if(handTarget!= null)
+            {
+                var pOffset = handTarget.TransformVector(positionOffset);
 
-            handModel.SetPositionAndRotation(skeletonWrist.position + pOffset,
-                Quaternion.Euler(skeletonWrist.rotation.eulerAngles + rotationOffset));
+                handModel.SetPositionAndRotation(handTarget.position + pOffset,
+                    Quaternion.Euler(handTarget.rotation.eulerAngles + rotationOffset));
+            }
         }
     }
 }

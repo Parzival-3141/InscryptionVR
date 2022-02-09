@@ -1,213 +1,222 @@
 {
-  "app_key": "application.generated.unity.inscryption.exe",
-  "bindings": {
-    "/actions/default": {
-      "chords": [],
-      "poses": [
-        {
-          "output": "/actions/default/in/pose",
-          "path": "/user/hand/left/pose/gdc2015"
-        },
-        {
-          "output": "/actions/default/in/pose",
-          "path": "/user/hand/right/pose/gdc2015"
-        }
-      ],
-      "haptics": [
-        {
-          "output": "/actions/default/out/haptics",
-          "path": "/user/hand/left/output/haptic"
-        },
-        {
-          "output": "/actions/default/out/haptics",
-          "path": "/user/hand/right/output/haptic"
-        }
-      ],
-      "sources": [
-        {
-          "path": "/user/hand/left/input/trigger",
-          "mode": "trigger",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/default/in/triggerclick"
+   "action_manifest_version" : 0,
+   "alias_info" : {},
+   "app_key" : "application.generated.unity.inscryption.exe",
+   "bindings" : {
+      "/actions/default" : {
+         "chords" : [],
+         "haptics" : [
+            {
+               "output" : "/actions/default/out/haptics",
+               "path" : "/user/hand/left/output/haptic"
             },
-            "pull": {
-              "output": "/actions/default/in/triggerpull"
+            {
+               "output" : "/actions/default/out/haptics",
+               "path" : "/user/hand/right/output/haptic"
             }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/thumbstick",
-          "mode": "joystick",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/default/in/thumbstickclick"
+         ],
+         "poses" : [
+            {
+               "output" : "none",
+               "path" : "/user/hand/left/pose/handgrip"
             },
-            "position": {
-              "output": "/actions/default/in/thumbstickpos"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/thumbstick",
-          "mode": "dpad",
-          "parameters": {
-            "sub_mode": "touch"
-          },
-          "inputs": {
-            "east": {
-              "output": "/actions/default/in/dpadright"
+            {
+               "output" : "none",
+               "path" : "/user/hand/right/pose/handgrip"
             },
-            "west": {
-              "output": "/actions/default/in/dpadleft"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/b",
-          "mode": "button",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/default/in/bclick"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/a",
-          "mode": "button",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/default/in/aclick"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/grip",
-          "mode": "grab",
-          "parameters": {},
-          "inputs": {
-            "grab": {
-              "output": "/actions/default/in/grip"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/grip",
-          "mode": "force_sensor",
-          "parameters": {},
-          "inputs": {
-            "force": {
-              "output": "/actions/default/in/grippull"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/a",
-          "mode": "button",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/default/in/aclick"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/b",
-          "mode": "button",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/default/in/bclick"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/grip",
-          "mode": "grab",
-          "parameters": {},
-          "inputs": {
-            "grab": {
-              "output": "/actions/default/in/grip"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/grip",
-          "mode": "force_sensor",
-          "parameters": {},
-          "inputs": {
-            "force": {
-              "output": "/actions/default/in/grippull"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/thumbstick",
-          "mode": "joystick",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/default/in/thumbstickclick"
+            {
+               "output" : "/actions/default/in/pose",
+               "path" : "/user/hand/left/pose/gdc2015"
             },
-            "position": {
-              "output": "/actions/default/in/thumbstickpos"
+            {
+               "output" : "/actions/default/in/pose",
+               "path" : "/user/hand/right/pose/gdc2015"
             }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/thumbstick",
-          "mode": "dpad",
-          "parameters": {},
-          "inputs": {
-            "east": {
-              "output": "/actions/default/in/dpadright"
+         ],
+         "skeleton" : [
+            {
+               "output" : "/actions/default/in/skeletonhandleft",
+               "path" : "/user/hand/left/input/skeleton/left"
             },
-            "west": {
-              "output": "/actions/default/in/dpadleft"
-            }
-			"north": {
-				"output": "/actions/default/in/dpadup"
-			}
-			"south": {
-				"output": "/actions/default/in/dpaddown"
-			}
-          }
-        },
-        {
-          "path": "/user/hand/right/input/trigger",
-          "mode": "trigger",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/default/in/triggerclick"
+            {
+               "output" : "/actions/default/in/skeletonhandright",
+               "path" : "/user/hand/right/input/skeleton/right"
             },
-            "pull": {
-              "output": "/actions/default/in/triggerpull"
+            {
+               "output" : "/actions/default/in/skeletonhandright",
+               "path" : "/user/hand/left/input/skeleton/right"
             }
-          }
-        }
-      ],
-      "skeleton": [
-        {
-          "output": "/actions/default/in/skeletonhandleft",
-          "path": "/user/hand/left/input/skeleton/left"
-        },
-        {
-          "output": "/actions/default/in/skeletonhandright",
-          "path": "/user/hand/right/input/skeleton/right"
-        },
-        {
-          "output": "/actions/default/in/skeletonhandright",
-          "path": "/user/hand/left/input/skeleton/right"
-        }
-      ]
-    }
-  },
-  "controller_type": "knuckles",
-  "description": "",
-  "name": "InscryptionVR [Testing] configuration for Index Controller"
+         ],
+         "sources" : [
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/triggerclick"
+                  },
+                  "pull" : {
+                     "output" : "/actions/default/in/triggerpull"
+                  }
+               },
+               "mode" : "trigger",
+               "path" : "/user/hand/left/input/trigger"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/thumbstickclick"
+                  },
+                  "position" : {
+                     "output" : "/actions/default/in/thumbstickpos"
+                  }
+               },
+               "mode" : "joystick",
+               "path" : "/user/hand/left/input/thumbstick"
+            },
+            {
+               "inputs" : {
+                  "east" : {
+                     "output" : "/actions/default/in/dpadright"
+                  },
+                  "north" : {
+                     "output" : "/actions/default/in/dpadup"
+                  },
+                  "south" : {
+                     "output" : "/actions/default/in/dpaddown"
+                  },
+                  "west" : {
+                     "output" : "/actions/default/in/dpadleft"
+                  }
+               },
+               "mode" : "dpad",
+               "parameters" : {
+                  "sub_mode" : "touch"
+               },
+               "path" : "/user/hand/left/input/thumbstick"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/bclick"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/b"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/aclick"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/a"
+            },
+            {
+               "inputs" : {
+                  "grab" : {
+                     "output" : "/actions/default/in/grip"
+                  }
+               },
+               "mode" : "grab",
+               "path" : "/user/hand/left/input/grip"
+            },
+            {
+               "inputs" : {
+                  "force" : {
+                     "output" : "/actions/default/in/grippull"
+                  }
+               },
+               "mode" : "force_sensor",
+               "path" : "/user/hand/left/input/grip"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/aclick"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/a"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/bclick"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/b"
+            },
+            {
+               "inputs" : {
+                  "grab" : {
+                     "output" : "/actions/default/in/grip"
+                  }
+               },
+               "mode" : "grab",
+               "path" : "/user/hand/right/input/grip"
+            },
+            {
+               "inputs" : {
+                  "force" : {
+                     "output" : "/actions/default/in/grippull"
+                  }
+               },
+               "mode" : "force_sensor",
+               "path" : "/user/hand/right/input/grip"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/thumbstickclick"
+                  },
+                  "position" : {
+                     "output" : "/actions/default/in/thumbstickpos"
+                  }
+               },
+               "mode" : "joystick",
+               "path" : "/user/hand/right/input/thumbstick"
+            },
+            {
+               "inputs" : {
+                  "east" : {
+                     "output" : "/actions/default/in/dpadright"
+                  },
+                  "north" : {
+                     "output" : "/actions/default/in/dpadup"
+                  },
+                  "south" : {
+                     "output" : "/actions/default/in/dpaddown"
+                  },
+                  "west" : {
+                     "output" : "/actions/default/in/dpadleft"
+                  }
+               },
+               "mode" : "dpad",
+               "parameters" : {
+                  "sub_mode" : "touch"
+               },
+               "path" : "/user/hand/right/input/thumbstick"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/triggerclick"
+                  },
+                  "pull" : {
+                     "output" : "/actions/default/in/triggerpull"
+                  }
+               },
+               "mode" : "trigger",
+               "path" : "/user/hand/right/input/trigger"
+            }
+         ]
+      }
+   },
+   "category" : "steamvr_input",
+   "controller_type" : "knuckles",
+   "description" : "",
+   "name" : "Inscryption Bindings_Knuckles",
+   "options" : {},
+   "simulated_actions" : []
 }
