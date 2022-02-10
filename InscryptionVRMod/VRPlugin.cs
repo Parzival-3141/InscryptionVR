@@ -28,9 +28,7 @@ namespace InscryptionVR
         internal static Scene CurrentScene { get; private set; }
         internal static new ManualLogSource Logger { get; private set; }
 
-
         private bool vrEnabled;
-        //private bool steamInitRunning;
 
         private void Awake()
         {
@@ -40,13 +38,12 @@ namespace InscryptionVR
 
             if (new List<string>(Environment.GetCommandLineArgs()).Contains("OpenVR"))
             {
-                Logger.LogInfo("VR patches enabled");
+                Logger.LogInfo("VR enabled");
                 vrEnabled = true;
             }
             else
             {
-                Logger.LogWarning("Launch parameter \"-vrmode\" not set to OpenVR, not loading VR patches!");
-
+                Logger.LogWarning("Launch parameter \"-vrmode\" not set to OpenVR, disabling VR modules!");
                 vrEnabled = false;
                 return;
             }
@@ -59,10 +56,6 @@ namespace InscryptionVR
                 vrEnabled = false;
                 return;
             }
-            
-
-            Logger.LogInfo("actions filepath: " + SteamVR.settings.actionsFilePath);
-            Logger.LogInfo("editor appkey: " + SteamVR.settings.editorAppKey);
 
             //  Init data
             Configs.Init(Config);

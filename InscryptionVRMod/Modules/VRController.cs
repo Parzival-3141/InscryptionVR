@@ -5,6 +5,8 @@ using InscryptionVR.Modules.Mono;
 using UnityEngine;
 using Valve.VR;
 
+#pragma warning disable Publicizer001
+
 namespace InscryptionVR.Modules
 {
     internal static class VRController
@@ -65,13 +67,23 @@ namespace InscryptionVR.Modules
             //pose.poseAction = SteamVR_Actions._default.Pose;
             //pose.inputSource = handObj.InputSource;
 
-            //  Model Positioning
+            //  Model stuff
             handObj.handModel = handObj.transform.Find("Hand Model " + subfix1);
             handObj.handTarget = skele.skeletonRoot.Find("wrist_r");
             //handObj.handTarget = null;
 
             handObj.handModel.transform.Find("mesh" + subfix2).
                 GetComponent<SkinnedMeshRenderer>().material.shader = Resources.HandDitherShader;
+            //handObj.handModel.transform.Find("Ring").GetComponent<MeshRenderer>().material = Material.
+            
+            var ring = handObj.handModel.transform.Find("Ring");
+
+            var flag = ring.gameObject.AddComponent<DiskCardGame.ActiveIfStoryFlag>();
+            flag.activeIfConditionMet = false;
+            flag.checkConditionEveryFrame = false;
+            flag.targetObject = null;
+            flag.updateWhenPaused = false;
+            flag.storyFlag = DiskCardGame.StoryEvent.Part3Completed;
 
             //  Controller Render Model
             if (shouldRenderRig)

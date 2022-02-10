@@ -31,7 +31,7 @@ namespace InscryptionVR.Modules
         [HarmonyPatch(typeof(InputButtons), "GetButtonDown")]
         private static bool GetButtonDownPatch(ref bool __result, Button button)
         {
-            if (button == Button.Select && VRController.VRRigExists) // @Refactor
+            if (button == Button.Select && VRController.VRRigExists) 
             {
                 __result = SteamVR_Actions.default_TriggerClick[VRController.PrimaryHand.InputSource].stateDown;
                 return false;

@@ -23,10 +23,10 @@ namespace InscryptionVR.Modules.Mono
 
         private void Awake()
         {
-            //var model = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
-            //model.SetParent(transform, false);
-            //model.localScale = Vector3.one * 0.1f;
-            //model.GetComponent<Collider>().enabled = false;
+            var pointer = GameObject.CreatePrimitive(PrimitiveType.Cylinder).transform;
+            pointer.SetParent(transform, false);
+            pointer.localScale = Vector3.one * 0.1f;
+            Destroy(pointer.GetComponent<Collider>());
         }
 
         private void LateUpdate()

@@ -15,7 +15,6 @@ namespace InscryptionVR.Modules
         public static GameObject VRRigPrefab { get; private set; }
         public static Shader HandDitherShader { get; private set; }
 
-
         public static void Init()
         {
             VRPlugin.Logger.LogInfo("Loading AssetBundle");
@@ -34,6 +33,7 @@ namespace InscryptionVR.Modules
             VRController.SetupVRRig(VRRigPrefab, left, right);
 
             //  Unload AssetBundle(?)
+            dataBundle.Unload(false);
         }
 
 

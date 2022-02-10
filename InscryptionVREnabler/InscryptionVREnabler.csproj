@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>InscryptionVREnabler</AssemblyName>
-    <Version>1.0.0</Version>
-    <Authors>MrPurple, DrBibop, Parzival</Authors>
+    <Version>2.0.0</Version>
+    <Authors>MrPurple, DrBibop, Parzival, Windows10CE</Authors>
     <ApplicationIcon />
     <Win32Resource />
     <RootNamespace>InscryptionVREnabler</RootNamespace>

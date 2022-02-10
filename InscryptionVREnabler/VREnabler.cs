@@ -13,7 +13,8 @@ using MonoMod.Utils;
 
 namespace InscryptionVREnabler
 {
-    //Class by MrPurple, adapted by DrBibop, modified by Parzival and Windows10CE
+    //  Original class by MrPurple and DrBibop
+    //  Adapted by Parzival and Windows10CE
 
     /// <summary>
     /// A patcher which runs ahead of UnityPlayer to enable VR in the Global Game Manager.
@@ -26,7 +27,7 @@ namespace InscryptionVREnabler
         internal static string SteamVRPath => Path.Combine(ManagedPath, "../StreamingAssets/SteamVR");
 
         private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("VREnabler");
-
+        private static bool vrEnabled;
 
         /// <summary>
         /// Called from BepInEx while patching, our entry point for patching.
@@ -35,16 +36,18 @@ namespace InscryptionVREnabler
         [Obsolete("Should not be used!", true)]
         public static void Initialize()
         {
-
             #region Patch GGM
-            //  @Refactor: Causes memory leak on startup
-            //Logger.LogInfo("Patching GGM...");
-            //if (!EnableVROptions(Path.Combine(ManagedPath, "../globalgamemanagers")))
-            //{
-            //    Logger.LogWarning("Couldn't patch GGM!");
-            //    return;
-            //}
-            //Logger.LogInfo("GGM patching successful!");
+            
+            vrEnabled = Environment.GetCommandLineArgs().Contains("OpenVR");
+            if (!vrEnabled)
+            {
+                Logger.LogWarning("Launch parameter \"-vrmode\" not set to OpenVR, unloading VR patches!");
+
+                VRPatchGGM(true);
+                return;
+            }
+            else if (!VRPatchGGM())
+                return;
 
             #endregion
 
@@ -72,7 +75,6 @@ namespace InscryptionVREnabler
             #endregion
 
             #region Copy Binds
-            //  @Refactor: SteamVR doesn't recognize/load the binds correctly (even if it says it does)
 
             Logger.LogInfo("Checking for binding files...");
 
@@ -117,86 +119,106 @@ namespace InscryptionVREnabler
 
         }
 
-        private static bool EnableVROptions(string path)
+        /// <param name="unPatch">Set <see langword="true"/> to remove VR patch.</param>
+        /// <returns><see langword="true"/> if patching/unpatching is successful.</returns>
+        private static bool VRPatchGGM(bool unPatch = false)
         {
-            AssetsManager assetsManager = new AssetsManager();
-            AssetsFileInstance assetsFileInstance = assetsManager.LoadAssetsFile(path, false, "");
-            assetsManager.LoadClassDatabase(Path.Combine(VRPatcherPath, "cldb.dat"));
-            int num = 0;
-            while ((long)num < (long)((ulong)assetsFileInstance.table.assetFileInfoCount))
+            var am = new AssetsManager();
+
+            //  Load ggm asset file
+            string path = Path.Combine(ManagedPath, "../globalgamemanagers");
+            AssetsFileInstance ggmInst = am.LoadAssetsFile(path, false);
+
+            try
             {
-                try
+                //  Load class database from .tpk package. classDB contains type info for the game
+                am.LoadClassPackage(Path.Combine(VRPatcherPath, "classdata.tpk"));
+                am.LoadClassDatabaseFromPackage(ggmInst.file.typeTree.unityVersion);
+
+                //  Get assetInfo for BuildSettings and get baseField (BuildSettings data) 
+                //  A bit hacky, but equivalent to expected result of ggmInst.table.GetAssetInfo("BuildSettings")
+                AssetFileInfoEx buildSettings = ggmInst.table.GetAssetsOfType((int)AssetClassID.BuildSettings)[0];
+                AssetTypeValueField buildSettingsBase = am.GetTypeInstance(ggmInst, buildSettings).GetBaseField();
+
+                Logger.LogArray(buildSettingsBase.GetName(), buildSettingsBase.children, true, LogLevel.Debug, (T) => $"{T.GetName()} | {T.GetFieldType()}");
+
+                //  Create new array for enabledVRDevices
+                AssetTypeValueField vrDevicesArray = buildSettingsBase.Get("enabledVRDevices").Get("Array");
+
+                Logger.LogArray("enabledVRDevices Before", vrDevicesArray.children, true, LogLevel.Debug, (T) => $"{T.GetValue().AsString()}");
+
+                AssetTypeValueField defaultVRDeviceField = ValueBuilder.DefaultValueFieldFromArrayTemplate(vrDevicesArray);
+
+                var vrDevice = unPatch ? "None" : "OpenVR";
+                defaultVRDeviceField.GetValue().Set(vrDevice);
+
+                var devices = new AssetTypeValueField[] { defaultVRDeviceField };
+                vrDevicesArray.SetChildrenList(devices);
+
+                Logger.LogMessage(unPatch ? "Unpatching GGM" : "Patching GGM");
+
+                //  Create AssetsReplacer and overwrite enabledVRDevices
+                var repl = new AssetsReplacerFromMemory(0, buildSettings.index, (int)buildSettings.curFileType, 0xffff, buildSettingsBase.WriteToByteArray());
+                using(var memoryStream = new MemoryStream())
                 {
-                    AssetFileInfoEx assetInfo = assetsFileInstance.table.GetAssetInfo((long)num);
-                    AssetTypeInstance ati = assetsManager.GetTypeInstance(assetsFileInstance, assetInfo, false);
-                    AssetTypeValueField assetTypeValueField = ati?.GetBaseField(0);
-                    AssetTypeValueField assetTypeValueField2 = assetTypeValueField?.Get("enabledVRDevices");
-                    if (assetTypeValueField2 != null)
+                    using (AssetsFileWriter writer = new AssetsFileWriter(memoryStream))
                     {
-                        AssetTypeValueField assetTypeValueField3 = assetTypeValueField2.Get("Array");
-                        if (assetTypeValueField3 != null)
-                        {
-                            AssetTypeValueField assetTypeValueField4 = ValueBuilder.DefaultValueFieldFromArrayTemplate(assetTypeValueField3);
-                            assetTypeValueField4.GetValue().Set("Oculus");
-                            AssetTypeValueField assetTypeValueField5 = ValueBuilder.DefaultValueFieldFromArrayTemplate(assetTypeValueField3);
-                            assetTypeValueField5.GetValue().Set("OpenVR");
-                            AssetTypeValueField assetTypeValueField6 = ValueBuilder.DefaultValueFieldFromArrayTemplate(assetTypeValueField3);
-                            assetTypeValueField6.GetValue().Set("None");
-                            assetTypeValueField3.SetChildrenList(new AssetTypeValueField[]
-                            {
-                                assetTypeValueField6,
-                                assetTypeValueField4,
-                                assetTypeValueField5
-                            });
-                            byte[] array;
-                            using (MemoryStream memoryStream = new MemoryStream())
-                            {
-                                using (AssetsFileWriter assetsFileWriter = new AssetsFileWriter(memoryStream))
-                                {
-                                    assetsFileWriter.bigEndian = false;
-                                    AssetWriters.Write(assetTypeValueField, assetsFileWriter, 0);
-                                    array = memoryStream.ToArray();
-                                }
-                            }
-                            List<AssetsReplacer> list = new List<AssetsReplacer>
-                            {
-                                new AssetsReplacerFromMemory(0, (long)num, (int)assetInfo.curFileType, ushort.MaxValue, array)
-                            };
-                            using (MemoryStream memoryStream2 = new MemoryStream())
-                            {
-                                using (AssetsFileWriter assetsFileWriter2 = new AssetsFileWriter(memoryStream2))
-                                {
-                                    assetsFileInstance.file.Write(assetsFileWriter2, (long)0UL, list, 0U, null);
-                                    assetsFileInstance.AssetsStream.Close();
-                                    File.WriteAllBytes(path, memoryStream2.ToArray());
-                                }
-                            }
-                            return true;
-                        }
+                        ggmInst.file.Write(writer, 0, new List<AssetsReplacer> { repl }, 0);
                     }
                 }
-                catch { }
-                num++;
+                
+                Logger.LogArray("enabledVRDevices After", vrDevicesArray.children, true, LogLevel.Debug, (T) => $"{T.GetValue().AsString()}");
+
+                am.UnloadAllAssetsFiles();
+
+                Logger.LogInfo($"GGM {(unPatch ? "un" : "")}patching successful!");
+
+                return true;
             }
-            Logger.LogError("VR enable location not found!");
-            return false;
+            catch(Exception e)
+            {
+                Logger.LogError("Error with VR Patching!");
+                Logger.LogError(e.Message + "\n" + e.StackTrace);
+                
+                am.UnloadAllAssetsFiles();
+                return false;
+            }
+        }
+
+        /// <param name="itemFormat">A method that returns the <see cref="string"/> that should be logged for each item in <paramref name="array"/>.</param>
+        private static void LogArray<T>(this ManualLogSource logger, string logTitle, IEnumerable<T> array, bool logIndex = false, LogLevel level = LogLevel.Info, Func<T, string> itemFormat = null)
+        {
+            logger.Log(level, $"--- {logTitle} ---");
+
+            int num = 0;
+            foreach(T item in array)
+            {
+                string n = logIndex ? $"[{num++}] " : "";
+
+                if (itemFormat is null)
+                    logger.Log(level, n + item.ToString());
+                else
+                    logger.Log(level, n + itemFormat.Invoke(item));
+            }
+            
+            logger.Log(level, "--- end ---");
         }
 
         private static bool CopyFiles(string destinationPath, string[] fileNames, string embedFolder, bool replaceIfDifferent = false)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(destinationPath);
             FileInfo[] files = directoryInfo.GetFiles();
-            bool flag = false;
             var executingAssembly = SR.Assembly.GetExecutingAssembly();
-            string name = executingAssembly.GetName().Name;
-            string[] array = fileNames;
-            for (int i = 0; i < array.Length; i++)
+            string asmName = executingAssembly.GetName().Name;
+
+            bool flag = false;
+            for (int i = 0; i < fileNames.Length; i++)
             {
-                string fileName = array[i];
+                string fileName = fileNames[i];
                 if (!Array.Exists<FileInfo>(files, (FileInfo file) => fileName == file.Name))
                 {
                     flag = true;
-                    using (Stream manifestResourceStream = executingAssembly.GetManifestResourceStream(name + "." + embedFolder + fileName))
+                    using (Stream manifestResourceStream = executingAssembly.GetManifestResourceStream(asmName + "." + embedFolder + fileName))
                     {
                         using (FileStream fileStream = new FileStream(Path.Combine(directoryInfo.FullName, fileName), FileMode.Create, FileAccess.ReadWrite, FileShare.Delete))
                         {
@@ -208,7 +230,7 @@ namespace InscryptionVREnabler
                 else if (replaceIfDifferent)
                 {
                     string resourceFileContent;
-                    using (Stream manifestResourceStream = executingAssembly.GetManifestResourceStream(name + "." + embedFolder + fileName))
+                    using (Stream manifestResourceStream = executingAssembly.GetManifestResourceStream(asmName + "." + embedFolder + fileName))
                     {
                         using (StreamReader reader = new StreamReader(manifestResourceStream))
                         {
@@ -248,6 +270,7 @@ namespace InscryptionVREnabler
         [Obsolete("Should not be used!", true)]
         public static void Patch(AssemblyDefinition asm)
         {
+            if (!vrEnabled) return;
 
             //  RaycastInteractable generic patch
             using (var pluginAsm = AssemblyDefinition.ReadAssembly(Directory.GetFiles(Paths.PluginPath, "InscryptionVRMod.dll", SearchOption.AllDirectories)[0]))
