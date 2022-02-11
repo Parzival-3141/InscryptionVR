@@ -24,6 +24,7 @@ namespace InscryptionVR.Modules
         public static void Init()
         {
             VRPlugin.Logger.LogInfo("Creating VRRig...");
+            VRPlugin.Logger.LogMessage("Ignore the script reference warnings");
             RigInstance = GameObject.Instantiate(Resources.VRRigPrefab).GetComponent<VRRig>();
         }
 
@@ -61,22 +62,28 @@ namespace InscryptionVR.Modules
             skele.mirroring = isRight ? SteamVR_Behaviour_Skeleton.MirrorType.None : SteamVR_Behaviour_Skeleton.MirrorType.RightToLeft;
             skele.fallbackCurlAction = SteamVR_Actions.default_GripPull;
 
+            VRPlugin.Logger.LogInfo("skele available: " + skele.skeletonAvailable 
+                + " | skele action: " + skele.skeletonAction.fullPath 
+                + " | skele active: " + skele.isActive);
+
 
             //  Behaviour Pose
             //var pose = handObj.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
             //pose.poseAction = SteamVR_Actions._default.Pose;
             //pose.inputSource = handObj.InputSource;
 
-            //  Model stuff
+            //  Hand Model
             handObj.handModel = handObj.transform.Find("Hand Model " + subfix1);
             handObj.handTarget = skele.skeletonRoot.Find("wrist_r");
             //handObj.handTarget = null;
 
             handObj.handModel.transform.Find("mesh" + subfix2).
                 GetComponent<SkinnedMeshRenderer>().material.shader = Resources.HandDitherShader;
-            //handObj.handModel.transform.Find("Ring").GetComponent<MeshRenderer>().material = Material.
-            
-            var ring = handObj.handModel.transform.Find("Ring");
+
+            //  Ring Model
+            string ringPath = $"{(isRight ? "fakeRoot/" : "")}hand{subfix2}/index1{subfix2}/RingParent/Ring";
+            var ring = handObj.handModel.transform.Find(ringPath);
+            ring.GetComponent<MeshRenderer>().material = UnityEngine.Resources.Load<Material>("art/assets3d/cabin/ring/Ring");
 
             var flag = ring.gameObject.AddComponent<DiskCardGame.ActiveIfStoryFlag>();
             flag.activeIfConditionMet = false;
