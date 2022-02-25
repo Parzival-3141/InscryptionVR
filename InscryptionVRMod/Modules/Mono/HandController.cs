@@ -23,9 +23,10 @@ namespace InscryptionVR.Modules.Mono
 
         private void Awake()
         {
-            var pointer = GameObject.CreatePrimitive(PrimitiveType.Cylinder).transform;
+            var pointer = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
             pointer.SetParent(transform, false);
-            pointer.localScale = Vector3.one * 0.1f;
+            pointer.localScale = new Vector3(0.1f, 0.1f, 5f);
+            pointer.localPosition = new Vector3(0f, 0f, 2.5f);
             Destroy(pointer.GetComponent<Collider>());
         }
 

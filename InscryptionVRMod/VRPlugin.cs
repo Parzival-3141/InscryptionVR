@@ -88,7 +88,7 @@ namespace InscryptionVR
                 case "Part1_Finale":
                 case "Part3_Cabin":
                     StartCoroutine(UIFixes());
-                    VRController.Init();
+                    VRController.InitRig();
                     break;
 
                 default:
