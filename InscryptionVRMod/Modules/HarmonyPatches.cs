@@ -23,7 +23,7 @@ namespace InscryptionVR.Modules
         //  Opponent Patches
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(OpponentAnimationController), "SetExplorationModeLookTarget")]
+        [HarmonyPatch(typeof(OpponentAnimationController), nameof(OpponentAnimationController.SetExplorationModeLookTarget))]
         private static bool ExplorationLookTargetPatch(OpponentAnimationController __instance)
         {
             __instance.SetLookTarget(ViewManager.Instance.CameraParent.Find("Pixel Camera"), UnityEngine.Vector3.zero);
@@ -31,7 +31,7 @@ namespace InscryptionVR.Modules
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(OpponentAnimationController), "ClearLookTarget")]
+        [HarmonyPatch(typeof(OpponentAnimationController), nameof(OpponentAnimationController.ClearLookTarget))]
         private static bool ClearLookTargetPatch(OpponentAnimationController __instance)
         {
             __instance.lookTarget = ViewManager.Instance.pixelCamera.transform;

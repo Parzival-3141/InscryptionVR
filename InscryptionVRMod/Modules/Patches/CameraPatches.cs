@@ -9,7 +9,7 @@ namespace InscryptionVR.Modules
     internal static partial class HarmonyPatches
     {
         [HarmonyILManipulator]
-        [HarmonyPatch(typeof(ReferenceResolutionSetter), "CalculateReferenceHeight")]
+        [HarmonyPatch(typeof(ReferenceResolutionSetter), nameof(ReferenceResolutionSetter.CalculateReferenceHeight))]
         private static void FixPixelationIL(ILContext il)
         {
             var c = new ILCursor(il); // steps through IL code of patched method
@@ -22,7 +22,7 @@ namespace InscryptionVR.Modules
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PixelCamera), "LateUpdate")]
+        [HarmonyPatch(typeof(PixelCamera), nameof(PixelCamera.LateUpdate))]
         private static void PixelCameraGBCTogglePatch(PixelCamera __instance)
         {
             if (Configs.EnableGBCToggle.Value) return;

@@ -27,9 +27,9 @@ namespace InscryptionVR.Modules
 
 #pragma warning disable Harmony003
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(InputButtons), "GetButtonDown")]
-        private static bool GetButtonDownPatch(ref bool __result, Button button)
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(InputButtons), nameof(InputButtons.GetButtonDown))]
+        private static void GetButtonDownPatch(ref bool __result, Button button)
         {
             if (VRController.VRRigExists)
             {
@@ -37,64 +37,46 @@ namespace InscryptionVR.Modules
                 {
                     case Button.Select:
                         __result = SteamVR_Actions._default.TriggerClick[VRController.PrimaryHand.InputSource].stateDown;
-                        return false;
+                        break;
 
                     case Button.AltSelect:
                         __result = SteamVR_Actions._default.TriggerClick[VRController.SecondaryHand.InputSource].stateDown;
-                        return false;
+                        break;
                     
-                    // @Incomplete: none of the dpad buttons work at all
+                    // @Refactor: none of the dpad buttons work at all
                     case Button.LookUp:
                     case Button.DirUp:
-                        __result = SteamVR_Actions._default.DPadUp[SteamVR_Input_Sources.RightHand].stateDown;
-                        VRPlugin.Logger.LogInfo("Up " + __result);
-                        return false;
+                        __result = SteamVR_Actions._default.DPadUp[SteamVR_Input_Sources.LeftHand].stateDown;
+                        break;
 
                     case Button.LookDown:
                     case Button.DirDown:
-                        VRPlugin.Logger.LogInfo("Down " + __result);
-                        __result = SteamVR_Actions._default.DPadDown[SteamVR_Input_Sources.RightHand].stateDown;
-                        return false;
+                        __result = SteamVR_Actions._default.DPadDown[SteamVR_Input_Sources.LeftHand].stateDown;
+                        break;
 
                     case Button.LookLeft:
                     case Button.DirLeft:
-                        VRPlugin.Logger.LogInfo("Left " + __result);
-                        __result = SteamVR_Actions._default.DPadLeft[SteamVR_Input_Sources.RightHand].stateDown;
-                        return false;
+                        __result = SteamVR_Actions._default.DPadLeft[SteamVR_Input_Sources.LeftHand].stateDown;
+                        break;
 
                     case Button.LookRight:
                     case Button.DirRight:
-                        VRPlugin.Logger.LogInfo("Right " + __result);
-                        __result = SteamVR_Actions._default.DPadRight[SteamVR_Input_Sources.RightHand].stateDown;
-                        return false;
+                        __result = SteamVR_Actions._default.DPadRight[SteamVR_Input_Sources.LeftHand].stateDown;
+                        break;
 
                     case Button.Menu:
-                        __result = SteamVR_Actions._default.BClick[SteamVR_Input_Sources.RightHand].stateDown;
-                        return false;
+                        __result = SteamVR_Actions._default.BClick[SteamVR_Input_Sources.LeftHand].stateDown;
+                        break;
 
                     default:
                         break;
                 }
             }
-
-            //if (button == Button.Select && VRController.VRRigExists) 
-            //{
-            //    __result = SteamVR_Actions.default_TriggerClick[VRController.PrimaryHand.InputSource].stateDown;
-            //    return false;
-            //}
-
-            //if(button == Button.AltSelect && VRController.VRRigExists)
-            //{
-            //    __result = SteamVR_Actions.default_TriggerClick[VRController.SecondaryHand.InputSource].stateDown;
-            //    return false;
-            //}
-
-            return true;
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(InputButtons), "GetButtonUp")]
-        private static bool GetButtonUpPatch(ref bool __result, Button button)
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(InputButtons), nameof(InputButtons.GetButtonUp))]
+        private static void GetButtonUpPatch(ref bool __result, Button button)
         {
             if (VRController.VRRigExists)
             {
@@ -102,54 +84,40 @@ namespace InscryptionVR.Modules
                 {
                     case Button.Select:
                         __result = SteamVR_Actions._default.TriggerClick[VRController.PrimaryHand.InputSource].stateUp;
-                        return false;
+                        break;
 
                     case Button.AltSelect:
                         __result = SteamVR_Actions._default.TriggerClick[VRController.SecondaryHand.InputSource].stateUp;
-                        return false;
+                        break;
 
                     case Button.LookUp:
                     case Button.DirUp:
                         __result = SteamVR_Actions._default.DPadUp[SteamVR_Input_Sources.LeftHand].stateUp;
-                        return false;
+                        break;
 
                     case Button.LookDown:
                     case Button.DirDown:
                         __result = SteamVR_Actions._default.DPadDown[SteamVR_Input_Sources.LeftHand].stateUp;
-                        return false;
+                        break;
 
                     case Button.LookLeft:
                     case Button.DirLeft:
                         __result = SteamVR_Actions._default.DPadLeft[SteamVR_Input_Sources.LeftHand].stateUp;
-                        return false;
+                        break;
 
                     case Button.LookRight:
                     case Button.DirRight:
                         __result = SteamVR_Actions._default.DPadRight[SteamVR_Input_Sources.LeftHand].stateUp;
-                        return false;
+                        break;
 
                     case Button.Menu:
                         __result = SteamVR_Actions._default.BClick[SteamVR_Input_Sources.RightHand].stateUp;
-                        return false;
+                        break;
 
                     default:
                         break;
                 }
             }
-
-            //if (button == Button.Select && VRController.VRRigExists)
-            //{
-            //    __result = SteamVR_Actions.default_TriggerClick[VRController.PrimaryHand.InputSource].stateUp;
-            //    return false;
-            //}
-
-            //if (button == Button.AltSelect && VRController.VRRigExists)
-            //{
-            //    __result = SteamVR_Actions.default_TriggerClick[VRController.SecondaryHand.InputSource].stateUp;
-            //    return false;
-            //}
-
-            return true;
         }
 
 #pragma warning restore Harmony003
