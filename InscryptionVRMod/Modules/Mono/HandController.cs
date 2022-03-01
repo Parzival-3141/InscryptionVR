@@ -25,14 +25,14 @@ namespace InscryptionVR.Modules.Mono
         {
             var pointer = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
             pointer.SetParent(transform, false);
-            pointer.localScale = new Vector3(0.1f, 0.1f, 5f);
+            pointer.localScale = new Vector3(0.05f, 0.05f, 5f);
             pointer.localPosition = new Vector3(0f, 0f, 2.5f);
             Destroy(pointer.GetComponent<Collider>());
         }
 
         private void LateUpdate()
         {
-            if(handTarget!= null)
+            if(handTarget != null)
             {
                 var pOffset = handTarget.TransformVector(positionOffset);
 

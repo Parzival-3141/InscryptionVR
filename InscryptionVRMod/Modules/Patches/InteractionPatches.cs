@@ -13,7 +13,10 @@ namespace InscryptionVR.Modules
         //  gets patched in the VREnabler patcher
         public static InteractableBase RaycastForInteractableReplacement(int layerMask, Type searchType)
         {
-            var handTransform = VRController.PrimaryHand.transform;
+            var handTransform = typeof(AlternateInputInteractable).IsAssignableFrom(searchType) 
+                ? VRController.SecondaryHand.transform 
+                : VRController.PrimaryHand.transform;
+
             var ray = new Ray(handTransform.position, handTransform.forward);
             
             InteractableBase interactable = default;

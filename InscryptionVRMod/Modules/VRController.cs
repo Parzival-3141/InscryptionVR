@@ -40,7 +40,8 @@ namespace InscryptionVR.Modules
             rig.calibratedCenter = VRRigPrefab.transform.Find("Calibrated Center");
             rig.handLeft = left;
             rig.handRight = right;
-            
+
+            //rig.trackingParent.localScale = Vector3.one * 6f;
         }
 
         public static HandController SetupHand(Hand hand, GameObject VRRigPrefab)

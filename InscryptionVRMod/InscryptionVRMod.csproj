@@ -29,6 +29,12 @@
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Reference Include="Rewired_Core.dll">
+			<HintPath>Libraries/Rewired_Core.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="COPY &quot;$(TargetPath)&quot; &quot;C:\Users\pocke\AppData\Roaming\r2modmanPlus-local\Inscryption\profiles\Default\BepInEx\plugins\&quot; /Y" />
 	</Target>
