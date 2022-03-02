@@ -36,24 +36,23 @@ namespace InscryptionVR.Modules
                 case Button.AltSelect:
                     return checkMethod.Invoke(SteamVR_Actions._default.TriggerClick[VRController.SecondaryHand.InputSource]);
 
-                case Button.LookUp:
-                case Button.DirUp:
+                case Button.DirUp or Button.LookUp:
                     return checkMethod.Invoke(SteamVR_Actions._default.DPadUp[SteamVR_Input_Sources.LeftHand]);
 
-                case Button.LookDown:
-                case Button.DirDown:
+                case Button.DirDown or Button.LookDown:
                     return checkMethod.Invoke(SteamVR_Actions._default.DPadDown[SteamVR_Input_Sources.LeftHand]);
 
-                case Button.LookLeft:
-                case Button.DirLeft:
+                case Button.DirLeft or Button.LookLeft:
+                    if (button == Button.DirLeft && DiskCardGame.FirstPersonController.Instance.MoveLocked)
+                        return false;
                     return checkMethod.Invoke(SteamVR_Actions._default.DPadLeft[SteamVR_Input_Sources.LeftHand]);
 
-                case Button.LookRight:
-                case Button.DirRight:
+                case Button.DirRight or Button.LookRight:
+                    if (button == Button.DirRight && DiskCardGame.FirstPersonController.Instance.MoveLocked)
+                        return false;
                     return checkMethod.Invoke(SteamVR_Actions._default.DPadRight[SteamVR_Input_Sources.LeftHand]);
 
-                case Button.AltMenu:
-                case Button.Menu:
+                case Button.Menu or Button.AltMenu:
                     return checkMethod.Invoke(SteamVR_Actions._default.BClick[SteamVR_Input_Sources.RightHand]);
 
                 default:
