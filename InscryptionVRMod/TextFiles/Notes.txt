@@ -25,6 +25,8 @@ Makes sense since thats how it'd work on flatscreen
 Create a little steamvr tracking rig in Unity and port it in
 Patch/rework Cursor and Interactable stuff to accept input from the VrRig
 
+for GBC sections, replace hands with a GBC styled controller. 
+
 
 
 ------  CABIN  ------
