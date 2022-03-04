@@ -13,32 +13,38 @@ namespace InscryptionVR.Modules.Mono
         { 
             get => handedness == Hand.Right ? SteamVR_Input_Sources.RightHand : SteamVR_Input_Sources.LeftHand; 
         }
+        public Transform RaycastOrigin => handModel;
         
         public Hand handedness;
 
         public Transform handModel; //  Assumes origin is in wrist!
-        public Transform handTarget;
-        public Vector3 positionOffset = new(0f, 0f, -0.02f);
-        public Vector3 rotationOffset = new(0f, 0f, -14f);
+        public Transform handModelTarget;
+        public Vector3 positionOffset = new(0.025f, 0.05f, -0.15f);
+        public Vector3 rotationOffset = new(45f, 0f, 0f);
 
-        private void Awake()
+        public Transform gripPoint;
+
+
+        private void Start()
         {
-            var pointer = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
-            pointer.SetParent(transform, false);
-            pointer.localScale = new Vector3(0.05f, 0.05f, 5f);
-            pointer.localPosition = new Vector3(0f, 0f, 2.5f);
-            Destroy(pointer.GetComponent<Collider>());
+            transform.Find("Pointer").SetParent(RaycastOrigin, false);
         }
 
         private void LateUpdate()
         {
-            if(handTarget != null)
-            {
-                var pOffset = handTarget.TransformVector(positionOffset);
+            if (handModelTarget == null)
+                handModelTarget = transform;
 
-                handModel.SetPositionAndRotation(handTarget.position + pOffset,
-                    Quaternion.Euler(handTarget.rotation.eulerAngles + rotationOffset));
-            }
+            //if (RaycastOrigin == null)
+            //    RaycastOrigin = transform;
+
+            var pOffset = Vector3.Scale(positionOffset, handedness == Hand.Left ? new Vector3(-1f,1f,1f) : Vector3.one);
+            
+            handModel.SetPositionAndRotation
+            (
+                handModelTarget.position + handModelTarget.TransformVector(pOffset), 
+                handModelTarget.rotation * Quaternion.Euler(rotationOffset)
+            );
         }
     }
 }

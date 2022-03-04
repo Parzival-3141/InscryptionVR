@@ -116,7 +116,6 @@ namespace InscryptionVREnabler
                 Logger.LogInfo("Binding files already present");
 
             #endregion
-
         }
 
         /// <param name="unPatch">Set <see langword="true"/> to remove VR patch.</param>

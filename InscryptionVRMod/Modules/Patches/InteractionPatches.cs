@@ -14,8 +14,8 @@ namespace InscryptionVR.Modules
         public static InteractableBase RaycastForInteractableReplacement(int layerMask, Type searchType)
         {
             var handTransform = typeof(AlternateInputInteractable).IsAssignableFrom(searchType) 
-                ? VRController.SecondaryHand.transform 
-                : VRController.PrimaryHand.transform;
+                ? VRController.SecondaryHand.RaycastOrigin
+                : VRController.PrimaryHand.RaycastOrigin;
 
             var ray = new Ray(handTransform.position, handTransform.forward);
             

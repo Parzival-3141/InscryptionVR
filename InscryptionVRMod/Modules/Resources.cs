@@ -19,7 +19,7 @@ namespace InscryptionVR.Modules
         {
             VRPlugin.Logger.LogInfo("Loading AssetBundle");
             VRPlugin.Logger.LogMessage("Ignore the script reference warnings");
-            AssetBundle dataBundle = GetAssetBundle("data");
+            AssetBundle dataBundle = GetAssetBundle("rigdata.bundle");
             if(dataBundle == null)
             {
                 VRPlugin.Logger.LogError("Could not load AssetBundle!");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using BepInEx.Logging;
 using Valve.VR;
+using UnityEngine;
 
 namespace InscryptionVR.Modules
 {
@@ -43,12 +44,12 @@ namespace InscryptionVR.Modules
                     return checkMethod.Invoke(SteamVR_Actions._default.DPadDown[SteamVR_Input_Sources.LeftHand]);
 
                 case Button.DirLeft or Button.LookLeft:
-                    if (button == Button.DirLeft && DiskCardGame.FirstPersonController.Instance.MoveLocked)
+                    if (button == Button.DirLeft && !DiskCardGame.FirstPersonController.Instance.MoveLocked)
                         return false;
                     return checkMethod.Invoke(SteamVR_Actions._default.DPadLeft[SteamVR_Input_Sources.LeftHand]);
 
                 case Button.DirRight or Button.LookRight:
-                    if (button == Button.DirRight && DiskCardGame.FirstPersonController.Instance.MoveLocked)
+                    if (button == Button.DirRight && !DiskCardGame.FirstPersonController.Instance.MoveLocked)
                         return false;
                     return checkMethod.Invoke(SteamVR_Actions._default.DPadRight[SteamVR_Input_Sources.LeftHand]);
 
@@ -58,6 +59,16 @@ namespace InscryptionVR.Modules
                 default:
                     return false;
             }
+        }
+
+        /// <summary>
+        /// Keeps the local scale of the child from before the parenting
+        /// </summary>
+        public static void SetParentScaled(this Transform child, Transform parent, bool worldPositionStays)
+        {
+            var ogScale = child.localScale;
+            child.SetParent(parent, worldPositionStays);
+            child.localScale = ogScale;
         }
     }
 }

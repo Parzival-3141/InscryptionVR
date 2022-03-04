@@ -18,60 +18,38 @@ namespace InscryptionVR.Modules
 
     internal static class VRInput
     {
-        private static ControllerElementIdentifier NewCEI(int id, string name, string positiveName, string negativeName, ControllerElementType elementType, bool isMappableOnPlatform)
-        {
-            var asm = Assembly.LoadFrom(BepInEx.Paths.ManagedPath + "Rewired_Core.dll");
-            Type cei = asm.GetType("ControllerElementIdentifier");
-
-            ConstructorInfo ceiConstructor = cei.GetConstructor(new Type[]
-            {
-                typeof(int),
-                typeof(string),
-                typeof(string),
-                typeof(string),
-                typeof(ControllerElementType),
-                typeof(bool)
-            });
-
-            return (ControllerElementIdentifier)ceiConstructor.Invoke(new object[]
-            {
-                id,
-                name,
-                positiveName,
-                negativeName,
-                elementType,
-                isMappableOnPlatform
-            });
-        }
-
         internal static CustomController CreateCustomController()
         {
-            //  Construct hcmap using reflection
-            var asm = Assembly.LoadFrom(BepInEx.Paths.ManagedPath + "Rewired_Core.dll");
-            Type hcm = asm.GetType("HardwareControllerMap_Game");
-
-            ConstructorInfo hcmConstructor = hcm.GetConstructor(new Type[] 
-            { 
-                typeof(string),
-                typeof(ControllerElementIdentifier[]), 
-                typeof(int[]), 
-                typeof(int[]),
-                typeof(AxisCalibrationData[]),
-                typeof(AxisRange[]),
-                typeof(HardwareAxisInfo[]),
-                typeof(HardwareButtonInfo[]),
-                typeof(HardwareJoystickMap.CompoundElement[])
-            });
-
-            object hcMap = hcmConstructor.Invoke(new object[]
-            {
+            var hcm = new HardwareControllerMap_Game
+            (
                 "VRControllers",
                 new ControllerElementIdentifier[]
                 {
-                    //NewCEI(0,)
-                }
-            });
+                    new ControllerElementIdentifier()
+                },
+                new int[0],
+                new int[0],
+                new AxisCalibrationData[]
+                {
 
+                },
+                new AxisRange[]
+                {
+
+                },
+                new HardwareAxisInfo[]
+                {
+
+                },
+                new HardwareButtonInfo[]
+                {
+
+                },
+                new HardwareJoystickMap.CompoundElement[]
+                {
+
+                }
+            );
 
 
             return null;

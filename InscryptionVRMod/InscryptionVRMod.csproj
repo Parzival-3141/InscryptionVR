@@ -10,11 +10,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\data" />
+	  <None Remove="Resources\rigdata.bundle" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="Resources\data" />
+	  <EmbeddedResource Include="Resources\rigdata.bundle" />
 	</ItemGroup>
 
 	<ItemGroup>

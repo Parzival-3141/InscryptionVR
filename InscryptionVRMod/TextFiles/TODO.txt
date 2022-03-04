@@ -1,0 +1,39 @@
+﻿TODO ✓
+
+VR Rig:
+	✓ Fix scaling
+		- Tracking root scale of 6x+ is about right
+		- Account for scale in height calibration
+	✓ Height Recalibration
+		- Press a button to get current height and use that to find the tracking-root position
+		- Maybe use it for positional calibration?
+	- HL:A style boundaries when you stick your head into a wall
+		- Blur screen out and point player back
+		- If they're outside the playable area ramp up glitch effects too
+	- GBA scene compatibility
+	
+
+VR Hands:
+	- Fix BehaviourSkeleton tracking
+	- In GBC sections, replace hands with a GBC styled controller
+		- Have animations for button presses
+	✓ Holding pickups in your hand
+		- Not entirely complete
+		- Would be cool to reach out and grab, not just raycast
+	- Move player figurine by picking it up manually
+	- Holding your deck
+		- deck in left hand, draw cards/interact with right
+		- grab card out of deck with right hand to play it
+		- deck leaves hand, can use left hand to select sacrifices
+		  (can grab deck w left hand to back out)
+		- play card with right hand
+
+Game Patches:
+	- Wrap InteractionCursor so I can delete it from the scene
+		- Patch cursor singleton to point to my own script?
+	- Fix "Screen position out of view frustum" error
+	- Fix candle flame rotation lock
+	- Get pause screen to work
+		- Get hands to render in front
+	- Patch FPS controller to use hmd rotation for LookDirection
+		- Might break when sitting down at the card table

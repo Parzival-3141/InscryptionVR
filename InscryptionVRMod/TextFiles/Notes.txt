@@ -1,4 +1,5 @@
 Oh boy is this unorganized :]
+> = completed
 
 --------  THINGS TO REWORK  --------
 
@@ -10,20 +11,20 @@ Screen position out of view frustum errors
 Cancel fov changes on vr camera (or silence the warnings at least)
 
 ---  PauseMenu  ---
-Move pause camera closer
+> Move pause camera closer
 
 
 ---  Mouse Input  ---
-Could try to use a controller as a pointer for the Cursor
-Would have to patch/rework the Cursor
+> Could try to use a controller as a pointer for the Cursor
+> Would have to patch/rework the Cursor
 
 Seems to work best when the main cam is pointing perpendicular to the UI "screen"
 Makes sense since thats how it'd work on flatscreen
 
 
 ---  Tracked Input  ---
-Create a little steamvr tracking rig in Unity and port it in
-Patch/rework Cursor and Interactable stuff to accept input from the VrRig
+> Create a little steamvr tracking rig in Unity and port it in
+> Patch/rework Cursor and Interactable stuff to accept input from the VrRig
 
 for GBC sections, replace hands with a GBC styled controller. 
 
@@ -58,8 +59,8 @@ Holding your deck
 	- play card with right hand
 
 
-Have to create actions and binds (with the correct appkey/url)
-Patch game inputs or subscribe steamvr inputs to game ones
+> Have to create actions and binds (with the correct appkey/url)
+> Patch game inputs or subscribe steamvr inputs to game ones
 
 Do HL:A style boundaries when you stick your head into a wall.
 Blur screen out and point player back, if they're outside the playable area ramp up glitch effects too.

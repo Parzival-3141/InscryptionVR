@@ -14,9 +14,12 @@ namespace InscryptionVR.Modules
         //  @Refactor:
         //  Bug with steamvr nullref-ing after leaving the 
         //  cabin, can't find a BehaviourPose object?
+        //  Might be old
 
         public const bool shouldRenderRig = false;
         public const bool useBehaviourSkeleton = false;
+        public const float rigScale = 6f;
+
         public static bool VRRigExists => RigInstance != null && RigInstance.isActiveAndEnabled;
         public static VRRig RigInstance { get; private set; }
         public static HandController PrimaryHand => Configs.IsLeftHanded.Value ? RigInstance.handLeft : RigInstance.handRight;
@@ -37,11 +40,11 @@ namespace InscryptionVR.Modules
 
             var rig = VRRigPrefab.AddComponent<VRRig>();
             rig.trackingParent = VRRigPrefab.transform.Find("TrackingParent");
-            rig.calibratedCenter = VRRigPrefab.transform.Find("Calibrated Center");
+            rig.calibratedCenter = rig.trackingParent.Find("Calibrated Center");
             rig.handLeft = left;
             rig.handRight = right;
 
-            //rig.trackingParent.localScale = Vector3.one * 6f;
+            rig.trackingParent.localScale = Vector3.one * rigScale;
         }
 
         public static HandController SetupHand(Hand hand, GameObject VRRigPrefab)
@@ -58,18 +61,18 @@ namespace InscryptionVR.Modules
             if (useBehaviourSkeleton)
             {
                 //  Behaviour Skeleton
-                //var skele = handObj.gameObject.AddComponent<SteamVR_Behaviour_Skeleton>();
-                //skele.skeletonAction = isRight ? SteamVR_Actions.default_SkeletonHandRight : SteamVR_Actions.default_SkeletonHandLeft;
-                //skele.inputSource = handObj.InputSource;
-                //skele.skeletonRoot = handObj.transform.Find("vr_glove_skeleton/Root");
-                //skele.mirroring = isRight ? SteamVR_Behaviour_Skeleton.MirrorType.None : SteamVR_Behaviour_Skeleton.MirrorType.RightToLeft;
-                //skele.fallbackCurlAction = SteamVR_Actions.default_GripPull;
+                var skele = handObj.gameObject.AddComponent<SteamVR_Behaviour_Skeleton>();
+                skele.skeletonAction = isRight ? SteamVR_Actions.default_SkeletonHandRight : SteamVR_Actions.default_SkeletonHandLeft;
+                skele.inputSource = handObj.InputSource;
+                skele.skeletonRoot = handObj.transform.Find("vr_glove_skeleton/Root");
+                skele.mirroring = isRight ? SteamVR_Behaviour_Skeleton.MirrorType.None : SteamVR_Behaviour_Skeleton.MirrorType.RightToLeft;
+                skele.fallbackCurlAction = SteamVR_Actions.default_GripPull;
 
-                //VRPlugin.Logger.LogInfo("skele available: " + skele.skeletonAvailable 
-                //    + " | skele action: " + skele.skeletonAction.fullPath 
-                //    + " | skele active: " + skele.isActive);
+                VRPlugin.Logger.LogInfo("skele available: " + skele.skeletonAvailable
+                    + " | skele action: " + skele.skeletonAction.fullPath
+                    + " | skele active: " + skele.isActive);
 
-                //handObj.handTarget = skele.skeletonRoot.Find("wrist_r");
+                handObj.handModelTarget = skele.skeletonRoot.Find("wrist_r");
             }
             else
             {
@@ -78,17 +81,18 @@ namespace InscryptionVR.Modules
                 pose.poseAction = SteamVR_Actions._default.Pose;
                 pose.inputSource = handObj.InputSource;
 
-                handObj.handTarget = null;
+                handObj.handModelTarget = null;
             }
 
             //  Hand Model
             handObj.handModel = handObj.transform.Find("Hand Model " + subfix1);
             handObj.handModel.transform.Find("mesh" + subfix2).
                 GetComponent<SkinnedMeshRenderer>().material.shader = Resources.HandDitherShader;
+            handObj.gripPoint = handObj.handModel.Find("Grip Point");
 
             //  Ring Model
             string ringPath = $"{(isRight ? "fakeRoot/" : "")}hand{subfix2}/index1{subfix2}/RingParent/Ring";
-            var ring = handObj.handModel.transform.Find(ringPath);
+            Transform ring = handObj.handModel.transform.Find(ringPath);
             ring.GetComponent<MeshRenderer>().material = UnityEngine.Resources.Load<Material>("art/assets3d/cabin/ring/Ring");
 
             var flag = ring.gameObject.AddComponent<DiskCardGame.ActiveIfStoryFlag>();
@@ -97,6 +101,8 @@ namespace InscryptionVR.Modules
             flag.targetObject = null;
             flag.updateWhenPaused = false;
             flag.storyFlag = DiskCardGame.StoryEvent.Part3Completed;
+
+            //ring.gameObject.SetActive(false);
 
             //  Controller Render Model
             //if (shouldRenderRig)
