@@ -3,6 +3,8 @@ A **(WIP)** VR mod for Inscryption
 
 As of now, the first chapter is mostly fully playable.
 
+[Outdated showcase video](https://youtu.be/X8T5MseibXA)
+
 ## TODO list
 - [x] Basic VR support
 - [x] Tracked Controllers
