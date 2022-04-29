@@ -13,3 +13,5 @@ As of now, the first chapter is mostly fully playable.
 - [ ] Support for all Chapters
 - [ ] \(Maybe) Faux-Physics Interactions
 - [ ] \(Probably) Rewrite everything lol
+
+*\(See TODO.txt for more info)*
