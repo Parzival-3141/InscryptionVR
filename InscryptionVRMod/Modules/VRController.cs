@@ -110,33 +110,6 @@ namespace InscryptionVR.Modules
 
             return handObj;
         }
-
-        private static void CreateRig()
-        {
-            VRPlugin.Logger.LogInfo("Creating VRRig...");
-            RigInstance = new GameObject("VRRig").AddComponent<VRRig>();
-
-            RigInstance.calibratedCenter = new GameObject("CalibratedCenter").transform;
-            RigInstance.calibratedCenter.SetParent(RigInstance.transform);
-            RigInstance.calibratedCenter.localPosition = new Vector3(0f, 1.1f);
-
-            RigInstance.handRight = CreateHand(Hand.Right);
-            RigInstance.handLeft = CreateHand(Hand.Left);
-        }
-
-        private static Mono.HandController CreateHand(Hand hand)
-        {
-            var handObj = new GameObject("Hand" + hand.ToString()).AddComponent<HandController>();
-            handObj.handedness = hand;
-            handObj.transform.SetParent(RigInstance.transform);
-            
-            var pose = handObj.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
-            pose.poseAction = SteamVR_Actions.default_Pose;
-            pose.origin = RigInstance.transform;
-            pose.inputSource = handObj.InputSource;
-
-            return handObj;
-        }
     }
 
     public enum Hand

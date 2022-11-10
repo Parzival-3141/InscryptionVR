@@ -18,6 +18,8 @@ VR Hands:
 	- In GBC sections, replace hands with a GBC styled controller
 		- Have animations for button presses
 	✓ Holding pickups in your hand
+		- Try hiding the hand mesh when grabbing
+		- Test with the game pickups (e.g. pliers)
 		- Not entirely complete
 		- Would be cool to reach out and grab, not just raycast
 	- Move player figurine by picking it up manually
@@ -29,6 +31,9 @@ VR Hands:
 		- play card with right hand
 
 Game Patches:
+	- Prevent the view movements in ViewManager
+		- Might have to change object placements too
+		- One's that arent jarring can stay
 	- Wrap InteractionCursor so I can delete it from the scene
 		- Patch cursor singleton to point to my own script?
 	- Fix "Screen position out of view frustum" error
