@@ -29,7 +29,7 @@ namespace InscryptionVR.Modules
         {
             VRPlugin.Logger.LogInfo("Creating VRRig...");
             VRPlugin.Logger.LogMessage("Ignore the script reference warnings");
-            RigInstance = GameObject.Instantiate(Resources.VRRigPrefab).GetComponent<VRRig>();
+            RigInstance = GameObject.Instantiate(Bundles.VRRigPrefab).GetComponent<VRRig>();
         }
 
         public static void SetupVRRig(GameObject VRRigPrefab, HandController left, HandController right)
@@ -87,7 +87,7 @@ namespace InscryptionVR.Modules
             //  Hand Model
             handObj.handModel = handObj.transform.Find("Hand Model " + subfix1);
             handObj.handModel.transform.Find("mesh" + subfix2).
-                GetComponent<SkinnedMeshRenderer>().material.shader = Resources.HandDitherShader;
+                GetComponent<SkinnedMeshRenderer>().material.shader = Bundles.HandDitherShader;
             handObj.gripPoint = handObj.handModel.Find("Grip Point");
 
             //  Ring Model

@@ -61,7 +61,7 @@ namespace InscryptionVR
             Configs.Init(Config);
             HarmonyPatches.Init();
             //SteamVR_Actions.PreInitialize();
-            Modules.Resources.Init();
+            Bundles.Init();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
